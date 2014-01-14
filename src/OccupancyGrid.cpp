@@ -27,8 +27,8 @@
 OccupancyGrid::OccupancyGrid():width(0), height(0), u0(0), v0(0), cols(0), rows(0), resolution(0){
 }
 
-OccupancyGrid::OccupancyGrid(const double& _width, const double& _height, const double& _resolution,
-			     const double& _u0, const double& _v0){
+OccupancyGrid::OccupancyGrid(const float& _width, const float& _height, const float& _resolution,
+			     const float& _u0, const float& _v0){
   init(_width, _height, _resolution, _u0, _v0);
 }
 
@@ -56,8 +56,8 @@ void OccupancyGrid::fill_msg(YARP_OccupancyGrid_msg& msg){
   msg.origin = origin;
 }
 
-void OccupancyGrid::init(const double& _width, const double& _height, const double& _resolution, 
-			 const double& _u0, const double& _v0){
+void OccupancyGrid::init(const float& _width, const float& _height, const float& _resolution, 
+			 const float& _u0, const float& _v0){
   width = _width;
   height = _height; 
   resolution = _resolution;
@@ -76,7 +76,7 @@ void OccupancyGrid::init(bool zero){
   origin.position.y = 0;
   origin.position.z = -height*v0;
   
-  double c45 = sqrt(2.0);
+  float c45 = sqrt(2.0);
   origin.orientation.x = c45;
   origin.orientation.y = 0;
   origin.orientation.z = 0;
@@ -91,7 +91,7 @@ void OccupancyGrid::init(bool zero){
   }
 }
 
-bool OccupancyGrid::set_value_rc(uint row, uint col, const double& value){
+bool OccupancyGrid::set_value_rc(uint row, uint col, const float& value){
   if(is_in_rc(row, col)){
     //std::cout << "Writing "<< value << " at coords " << row << ", " << col << ", index:" << get_idx_rc(row, col) << " size: " << width*height << rows << " x " << cols <<std::endl;
     // 
@@ -102,7 +102,7 @@ bool OccupancyGrid::set_value_rc(uint row, uint col, const double& value){
   return false;
 }
 
-bool OccupancyGrid::get_value_rc(uint row, uint col, double &value) const{
+bool OccupancyGrid::get_value_rc(uint row, uint col, float &value) const{
   if(is_in_rc(row, col)){
     value = data[get_idx_rc(row, col)];   
     return true;
@@ -110,26 +110,26 @@ bool OccupancyGrid::get_value_rc(uint row, uint col, double &value) const{
   return false;
 }
 
-double OccupancyGrid::value_rc(uint row, uint col) const{
+float OccupancyGrid::value_rc(uint row, uint col) const{
   if(is_in_rc(row, col)){
     return data[get_idx_rc(row, col)];
   }
   return 0;
 }
     
-bool OccupancyGrid::set_value_xy(double x, double y, const double& value){
+bool OccupancyGrid::set_value_xy(float x, float y, const float& value){
   return set_value_rc(get_row(y), get_col(x), value);
 }
 
-bool OccupancyGrid::get_value_xy(double x, double y, double& value) const{
+bool OccupancyGrid::get_value_xy(float x, float y, float& value) const{
   return get_value_rc(get_row(y), get_col(x), value);
 }
 
-double OccupancyGrid::value_xy(double x, double y) const{
+float OccupancyGrid::value_xy(float x, float y) const{
   return value_rc(get_row(y), get_col(x));
 }
     
-bool OccupancyGrid::is_in_xy(double x, double y) const{
+bool OccupancyGrid::is_in_xy(float x, float y) const{
   return is_in_rc(get_row(y), get_col(x));
 }
   
@@ -137,27 +137,27 @@ bool OccupancyGrid::is_in_rc(uint row, uint col) const{
   return row<rows && col<cols;
 }
   
-uint OccupancyGrid::get_col(double x) const{
-  double xmin = -u0*width;
+uint OccupancyGrid::get_col(float x) const{
+  float xmin = -u0*width;
   int res =  round((x-xmin)/resolution);
   if(res < 0) res = 0;
   if(res > cols) res = cols;
   return res; 
 }
 
-uint OccupancyGrid::get_row(double y) const{
-  double ymin = -v0*height;
+uint OccupancyGrid::get_row(float y) const{
+  float ymin = -v0*height;
   int res = round((y-ymin)/resolution);
   if(res < 0) res = 0;
   if(res > rows) res = rows;
   return res;
 }
 
-double OccupancyGrid::get_x(uint col) const{
+float OccupancyGrid::get_x(uint col) const{
   return col*resolution-u0*width;
 }
 
-double OccupancyGrid::get_y(uint row) const{
+float OccupancyGrid::get_y(uint row) const{
   return row*resolution-v0*height;
 }
 
@@ -166,7 +166,7 @@ size_t OccupancyGrid::get_idx_rc(uint row, uint col) const{
   return row*cols+col;
 }
 
-uint OccupancyGrid::get_idx_xy(double x, double y) const{
+uint OccupancyGrid::get_idx_xy(float x, float y) const{
   return get_idx_rc(get_row(y), get_col(x));
 }
 
