@@ -4,8 +4,10 @@
 #include <stdio.h>
 #include <yarp/os/all.h>
 #include <assert.h>
+#include <boost/concept_check.hpp>
 #include <shared/yarp_msgs/YARP_Header.h>
 #include <shared/utils/OccupancyGrid.h>
+#include <map>
 
 /*  Quick (re)implementation of an OccupancyGrid
  *                
@@ -176,6 +178,22 @@ void OccupancyGrid::print(){
   for(auto p: data){
     if(i%cols==0) std::cout << std::endl;
     std::cout << p << " ";
+    i++;      
+  }
+  std::cout << std::endl;
+}
+
+void OccupancyGrid::print_human(){
+  std::map <int, char> alph;
+  alph[0] = ' ';
+  alph[1] = '#';
+  alph[8] = '-';
+  alph[9] = '@';
+  std::cout << "Printing map: "<< width << " " << height << " " << resolution << std::flush;
+  uint i=0;
+  for(auto p: data){
+    if(i%cols==0) std::cout << std::endl;
+    std::cout << alph[p] << " ";
     i++;      
   }
   std::cout << std::endl;
