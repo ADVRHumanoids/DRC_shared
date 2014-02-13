@@ -4,7 +4,7 @@
  *  email: v.varricchio@gmail.com 
  */
 
-#include <shared/yarp_msgs/YARP_PointCloud2.h>
+#include <drc_shared/yarp_msgs/YARP_PointCloud2.h>
 #include "YARP_grabber.hpp"
 
 template <class PCL_PointCloud_t>

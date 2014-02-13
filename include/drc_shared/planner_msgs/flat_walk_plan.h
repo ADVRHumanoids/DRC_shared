@@ -10,9 +10,9 @@
 
 #include <string.h>
 #include <vector>
-#include <shared/yarp_msgs/YARP_Point.h>
+#include <drc_shared/yarp_msgs/YARP_Point.h>
 #include <yarp/os/Portable.h>
-#include <shared/utils/Pose2D.h>
+#include <drc_shared/utils/Pose2D.h>
 
 #include "flat_walk_cmd.h"
 

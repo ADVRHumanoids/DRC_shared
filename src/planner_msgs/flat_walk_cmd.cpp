@@ -5,7 +5,7 @@
  *  email: v.varricchio@gmail.com 
  */
 
-#include <shared/planner_msgs/flat_walk_cmd.h>
+#include <drc_shared/planner_msgs/flat_walk_cmd.h>
 #include <assert.h>
 #include <math.h>
 #include <string.h>

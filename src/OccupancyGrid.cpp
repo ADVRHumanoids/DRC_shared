@@ -5,8 +5,8 @@
 #include <yarp/os/all.h>
 #include <assert.h>
 #include <boost/concept_check.hpp>
-#include <shared/yarp_msgs/YARP_Header.h>
-#include <shared/utils/OccupancyGrid.h>
+#include <drc_shared/yarp_msgs/YARP_Header.h>
+#include <drc_shared/utils/OccupancyGrid.h>
 #include <map>
 
 /*  Quick (re)implementation of an OccupancyGrid

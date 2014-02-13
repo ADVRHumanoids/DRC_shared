@@ -4,7 +4,7 @@
  *  email: v.varricchio@gmail.com 
  */
 
-#include <shared/utils/OccupancyGrid.h>
+#include <drc_shared/utils/OccupancyGrid.h>
 #include "YARP_grabber.hpp"
 
 class YARP_OccupancyGrid_grabber : public yarp_msg_grabber<YARP_OccupancyGrid_msg, OccupancyGrid>  {
