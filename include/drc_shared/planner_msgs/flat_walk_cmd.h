@@ -15,6 +15,13 @@
 #include <drc_shared/yarp_msgs/YARP_Point.h>
 #include "cmd_struct.h"
 
+#define FLAT_WALK_FWD "fwd"
+#define FLAT_WALK_BWD "bwd"
+#define FLAT_WALK_SIDE_L "right"
+#define FLAT_WALK_SIDE_R "left"
+#define FLAT_WALK_ROT_R "rotr"
+#define FLAT_WALK_ROT_L "rotl"
+
 class flat_walk_cmd : public yarp::os::Portable{
 public:
     

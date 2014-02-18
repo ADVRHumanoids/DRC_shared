@@ -11,17 +11,17 @@
 #include <string.h>
 
 std::map<std::string,std::string> flat_walk_cmd::opposite = {
-  {"fwd", "bwd"},
-  {"bwd", "fwd"},
-  {"rotl", "rotr"},
-  {"rotr", "rotl"}
+  {FLAT_WALK_FWD, FLAT_WALK_BWD},
+  {FLAT_WALK_BWD, FLAT_WALK_FWD},
+  {FLAT_WALK_ROT_L, FLAT_WALK_ROT_R},
+  {FLAT_WALK_SIDE_L, FLAT_WALK_SIDE_R}
 };
 
 std::map<std::string,double> flat_walk_cmd::el = {
-  {"fwd", 0.1},
-  {"bwd", 0.1},
-  {"rotl", 1.5},
-  {"rotr", 1.5}
+  {FLAT_WALK_FWD, 0.05},
+  {FLAT_WALK_BWD, 0.05},
+  {FLAT_WALK_ROT_L, 3},
+  {FLAT_WALK_ROT_R, 3}
 };
 
 yarp::os::ConstString flat_walk_cmd::getTypeName() const {
@@ -70,16 +70,16 @@ void flat_walk_cmd::normalize(){
 cmd_struct flat_walk_cmd::to_struct() const{
   cmd_struct cmd_transl;
   cmd_transl.seq_num = seq_num;
-  if(strcmp(action.c_str(), "fwd")==0){
+  if(strcmp(action.c_str(), FLAT_WALK_FWD)==0){
     cmd_transl.walk_meters = amount;
     cmd_transl.turn_deg = 0;
-  }else if(strcmp(action.c_str(), "bwd")==0){
+  }else if(strcmp(action.c_str(), FLAT_WALK_BWD)==0){
     cmd_transl.walk_meters = -amount;
     cmd_transl.turn_deg = 0;
-  }else if(strcmp(action.c_str(), "rotl")==0){
+  }else if(strcmp(action.c_str(), FLAT_WALK_ROT_L)==0){
     cmd_transl.walk_meters = 0;
     cmd_transl.turn_deg = amount;
-  }else if(strcmp(action.c_str(), "rotr")==0){
+  }else if(strcmp(action.c_str(), FLAT_WALK_ROT_R)==0){
     cmd_transl.walk_meters = 0;
     cmd_transl.turn_deg = -amount;	
   }else{
@@ -95,10 +95,10 @@ bool flat_walk_cmd::from_struct(const cmd_struct& cmds){
     return false;
   if(cmds.walk_meters!=0){
     amount = fabs(cmds.walk_meters);
-    action = (cmds.walk_meters>0) ? "fwd" : "bwd";
+    action = (cmds.walk_meters>0) ? FLAT_WALK_FWD : FLAT_WALK_BWD;
   }else if(cmds.turn_deg!=0){
     amount = fabs(cmds.turn_deg);
-    action = (cmds.walk_meters>0) ? "rotl" : "rotr";
+    action = (cmds.walk_meters>0) ? FLAT_WALK_ROT_L : FLAT_WALK_ROT_R;
   }
 }  
 

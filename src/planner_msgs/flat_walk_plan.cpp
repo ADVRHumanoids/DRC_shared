@@ -57,7 +57,7 @@ std::vector<YARP_Point> flat_walk_plan::to_path(){
     next = next_pose(cur, cmd);
     p.x = next.x;
     p.y = next.y;
-    if(strcmp(cmd.action.c_str(), "rotl")!=0 && strcmp(cmd.action.c_str(), "rotr")!=0){
+    if(strcmp(cmd.action.c_str(), FLAT_WALK_ROT_L)!=0 && strcmp(cmd.action.c_str(), FLAT_WALK_ROT_R)!=0){
       res.push_back(p);
     }
     cur = next;
@@ -73,9 +73,11 @@ std::vector<Pose2D> flat_walk_plan::to_traj(){
     int num;
     flat_walk_cmd elem_cmd;
     std::tie(elem_cmd, num) = flat_walk_cmd::split(cmd);
+    auto inp = res.back();
     for(size_t n=0; n<num; n++){
       res.push_back(next_pose(res.back(), elem_cmd));
     } 
+    res.push_back(next_pose(inp, cmd)); // force exact final position
   }
   return res;
 }
@@ -113,20 +115,20 @@ void flat_walk_plan::from_rrts_unicycle_controls(const float* init_state, std::v
     cmd.seq_num = i;
     i++;
     cmd.amount = c[0]+turn2;
-    cmd.action = "rotl";
+    cmd.action = FLAT_WALK_ROT_L; 
     cmd.normalize();
     controls.push_back(cmd);
     cmd.seq_num = i;
     i++;
     cmd.amount = c[1];
-    cmd.action = "fwd";
+    cmd.action = FLAT_WALK_FWD;
     cmd.normalize();
     controls.push_back(cmd);
     turn2 = c[2];
   }
   cmd.seq_num = i;
   cmd.amount = turn2;
-  cmd.action = "rotl";
+  cmd.action = FLAT_WALK_ROT_L;
   cmd.normalize();
   controls.push_back(cmd);
 }
