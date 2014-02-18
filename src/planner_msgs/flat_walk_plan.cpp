@@ -5,8 +5,8 @@
  *  email: v.varricchio@gmail.com 
  */
 
-#include <shared/planner_msgs/flat_walk_plan.h>
-#include <shared/yarp_msgs/YARP_Pose.h>
+#include <drc_shared/planner_msgs/flat_walk_plan.h>
+#include <drc_shared/yarp_msgs/YARP_Pose.h>
 #include <tuple>
 
 flat_walk_plan::flat_walk_plan(){

@@ -12,7 +12,7 @@
 #include <map>
 #include <utility>
 #include <yarp/os/Portable.h>
-#include <shared/yarp_msgs/YARP_Point.h>
+#include <drc_shared/yarp_msgs/YARP_Point.h>
 #include "cmd_struct.h"
 
 class flat_walk_cmd : public yarp::os::Portable{
