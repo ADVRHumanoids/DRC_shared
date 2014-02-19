@@ -90,8 +90,8 @@ Pose2D flat_walk_plan::next_pose(const Pose2D& ip, const flat_walk_cmd& cmd){
   std::cout << "with command " << cmd.action << " " << cmd.amount << std::endl; */
 
   Pose2D res;
-  res.x = ip.x + cmd_transl.walk_meters*cos(ip.yaw);
-  res.y = ip.y + cmd_transl.walk_meters*sin(ip.yaw);
+  res.x = ip.x + cmd_transl.walk_meters*cos(ip.yaw) - cmd_transl.side_meters*sin(ip.yaw);
+  res.y = ip.y + cmd_transl.walk_meters*sin(ip.yaw) + cmd_transl.side_meters*cos(ip.yaw);
   res.yaw = ip.yaw + cmd_transl.turn_deg*M_PI/180;
   
   return res;
@@ -109,22 +109,22 @@ void flat_walk_plan::from_rrts_unicycle_controls(const float* init_state, std::v
     // To be compliant with interfaces, a
     // conversion to degrees here is needed
     
-    c[0] = c[0]*180/M_PI; 
-    c[2] = c[2]*180/M_PI;
+    c[1] = c[1]*180/M_PI; 
+    c[3] = c[3]*180/M_PI;
 
     cmd.seq_num = i;
     i++;
-    cmd.amount = c[0]+turn2;
+    cmd.amount = c[1]+turn2;
     cmd.action = FLAT_WALK_ROT_L; 
     cmd.normalize();
     controls.push_back(cmd);
     cmd.seq_num = i;
     i++;
-    cmd.amount = c[1];
-    cmd.action = FLAT_WALK_FWD;
+    cmd.amount = c[2];
+    cmd.action = (c[0]==0) ? FLAT_WALK_FWD : FLAT_WALK_SIDE_L;
     cmd.normalize();
     controls.push_back(cmd);
-    turn2 = c[2];
+    turn2 = c[3];
   }
   cmd.seq_num = i;
   cmd.amount = turn2;
