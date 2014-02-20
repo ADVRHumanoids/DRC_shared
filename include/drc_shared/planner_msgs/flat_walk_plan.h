@@ -34,13 +34,18 @@ public:
 
   // Utils
   
+  void append_cmd(const flat_walk_cmd&);
+  
+  void append(const flat_walk_plan&);
+  
   std::vector<YARP_Point> to_path();
 
   std::vector<Pose2D> to_traj();
  
-  Pose2D next_pose(const Pose2D& ip, const flat_walk_cmd& cmd);
+  Pose2D next_pose(const Pose2D& ip, const flat_walk_cmd&);
   
   void from_rrts_unicycle_controls(const float* init_state, std::vector<float*> traj_controls, int seq_num_offset = 0);
+    
 };
 
 #endif

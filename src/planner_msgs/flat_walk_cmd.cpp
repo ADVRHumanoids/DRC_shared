@@ -53,18 +53,23 @@ bool flat_walk_cmd::write(yarp::os::ConnectionWriter& connection) {
 
 bool flat_walk_cmd::add(const flat_walk_cmd& cmd){
   // Returns false if commands cannot be added
+  if(action==""){
+    amount = cmd.amount;
+    action = cmd.action;
+    return true;
+  }
   cmd_struct cmds0 = this->to_struct();
   cmd_struct cmds1 = cmd.to_struct();
   cmd_struct res;
   res.seq_num = seq_num;
   res.turn_deg = cmds0.turn_deg +cmds1.turn_deg;
   res.walk_meters = cmds0.walk_meters+cmds1.walk_meters;
+  res.side_meters= cmds0.side_meters+cmds1.side_meters;
   
   return from_struct(res);
 }
 
 void flat_walk_cmd::normalize(){
-  
   if(amount<0){
     amount = -amount;
     action = opposite[action];
@@ -94,6 +99,8 @@ cmd_struct flat_walk_cmd::to_struct() const{
     cmd_transl.side_meters = -amount;
     cmd_transl.walk_meters = 0;
     cmd_transl.turn_deg = 0;
+  }else if(action==""){	
+    cmd_transl.side_meters = cmd_transl.walk_meters = cmd_transl.turn_deg = 0;
   }else{
     std::cout << "Action '" << action << "' is either not valid or not implemented." << std::endl;
     assert(false);
@@ -103,17 +110,20 @@ cmd_struct flat_walk_cmd::to_struct() const{
 
 bool flat_walk_cmd::from_struct(const cmd_struct& cmds){
   seq_num = cmds.seq_num;
-  assert(cmds.walk_meters*cmds.turn_deg == 0 || cmds.side_meters*cmds.turn_deg == 0 || cmds.side_meters*cmds.walk_meters == 0);
-  if(cmds.walk_meters!=0){
-    amount = fabs(cmds.walk_meters);
-    action = (cmds.walk_meters>0) ? FLAT_WALK_FWD : FLAT_WALK_BWD;
-  }else if(cmds.turn_deg!=0){
-    amount = fabs(cmds.turn_deg);
-    action = (cmds.walk_meters>0) ? FLAT_WALK_ROT_L : FLAT_WALK_ROT_R;
-  }else if(cmds.side_meters!=0){
-    amount = fabs(cmds.side_meters);
-    action = (cmds.side_meters>0) ? FLAT_WALK_SIDE_L : FLAT_WALK_SIDE_R;
-  }
+  if(cmds.is_ok()){
+    if(cmds.walk_meters!=0){
+      amount = fabs(cmds.walk_meters);
+      action = (cmds.walk_meters>0) ? FLAT_WALK_FWD : FLAT_WALK_BWD;
+    }else if(cmds.turn_deg!=0){
+      amount = fabs(cmds.turn_deg);
+      action = (cmds.turn_deg>0) ? FLAT_WALK_ROT_L : FLAT_WALK_ROT_R;
+    }else if(cmds.side_meters!=0){
+      amount = fabs(cmds.side_meters);
+      action = (cmds.side_meters>0) ? FLAT_WALK_SIDE_L : FLAT_WALK_SIDE_R;
+    }
+    return true;
+  }else
+    return false;
 }  
 
 std::pair<flat_walk_cmd, size_t> flat_walk_cmd::split(const flat_walk_cmd& cmd){
