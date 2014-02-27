@@ -7,6 +7,7 @@
 
 #include <drc_shared/planner_msgs/flat_walk_plan.h>
 #include <drc_shared/yarp_msgs/YARP_Pose.h>
+
 #include <tuple>
 
 flat_walk_plan::flat_walk_plan(){
@@ -18,7 +19,7 @@ yarp::os::ConstString flat_walk_plan::getTypeName() const {
 
 bool flat_walk_plan::read(yarp::os::ConnectionReader& connection) {
   controls.clear();
-  status = connection.expectInt();
+  //status = connection.expectInt();
   progress = connection.expectInt(); 
   int len = connection.expectInt();
   
@@ -34,7 +35,7 @@ bool flat_walk_plan::read(yarp::os::ConnectionReader& connection) {
 }
 
 bool flat_walk_plan::write(yarp::os::ConnectionWriter& connection) {
-  connection.appendInt(status);
+  //connection.appendInt(status);
   connection.appendInt(progress);
   connection.appendInt(controls.size());
   

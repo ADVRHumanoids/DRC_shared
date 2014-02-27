@@ -20,6 +20,7 @@ class flat_walk_plan : public yarp::os::Portable{
   
 public:
   int status;
+  
   int progress;
   std::vector<flat_walk_cmd> controls;
   YARP_Point init_pose;
