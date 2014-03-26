@@ -1,0 +1,11 @@
+<!-- Here we put all the modules needed to start the FULL GUI -->
+<launch>
+
+<!-- To start the 3d camera  -->
+  <param name="depth_registration" value="true"/>
+  <param name="color_depth_synchronization" value="true"/>
+
+  <node pkg="dynamic_reconfigure" type="dynparam" name="dynparam1" args="set /camera/driver depth_registration true" />
+  <node pkg="dynamic_reconfigure" type="dynparam" name="dynparam2" args="set /camera/driver color_synchronization true" />
+  <include file="$(find openni2_launch)/launch/openni2.launch"/>
+</launch>

@@ -7,6 +7,7 @@
 
 #include <drc_shared/planner_msgs/flat_walk_plan.h>
 #include <drc_shared/yarp_msgs/YARP_Pose.h>
+
 #include <tuple>
 
 flat_walk_plan::flat_walk_plan(){
@@ -18,7 +19,7 @@ yarp::os::ConstString flat_walk_plan::getTypeName() const {
 
 bool flat_walk_plan::read(yarp::os::ConnectionReader& connection) {
   controls.clear();
-  status = connection.expectInt();
+  //status = connection.expectInt();
   progress = connection.expectInt(); 
   int len = connection.expectInt();
   
@@ -34,7 +35,7 @@ bool flat_walk_plan::read(yarp::os::ConnectionReader& connection) {
 }
 
 bool flat_walk_plan::write(yarp::os::ConnectionWriter& connection) {
-  connection.appendInt(status);
+  //connection.appendInt(status);
   connection.appendInt(progress);
   connection.appendInt(controls.size());
   
@@ -90,14 +91,32 @@ Pose2D flat_walk_plan::next_pose(const Pose2D& ip, const flat_walk_cmd& cmd){
   std::cout << "with command " << cmd.action << " " << cmd.amount << std::endl; */
 
   Pose2D res;
-  res.x = ip.x + cmd_transl.walk_meters*cos(ip.yaw);
-  res.y = ip.y + cmd_transl.walk_meters*sin(ip.yaw);
+  res.x = ip.x + cmd_transl.walk_meters*cos(ip.yaw) - cmd_transl.side_meters*sin(ip.yaw);
+  res.y = ip.y + cmd_transl.walk_meters*sin(ip.yaw) + cmd_transl.side_meters*cos(ip.yaw);
   res.yaw = ip.yaw + cmd_transl.turn_deg*M_PI/180;
   
   return res;
 }
 
+void flat_walk_plan::append_cmd(const flat_walk_cmd& cmd){
+  if(controls.size()==0){
+    controls.push_back(cmd);
+  }else{
+    if(!controls.back().add(cmd)){
+      controls.push_back(cmd);
+    }
+  }
+}
+
+void flat_walk_plan::append(const flat_walk_plan& pl){
+  this->append_cmd(pl.controls[0]);
+  for(size_t i=1; i<pl.controls.size(); i++)
+    controls.push_back(pl.controls[i]);
+}
+
 void flat_walk_plan::from_rrts_unicycle_controls(const float* init_state, std::vector<float*> traj_controls, int seq_num_offset){
+  // this function could be rewritten by using append_cmd()!
+  
   init_pose = YARP_Point(init_state[0], init_state[1], init_state[2]);
 
   controls.clear();
@@ -108,23 +127,30 @@ void flat_walk_plan::from_rrts_unicycle_controls(const float* init_state, std::v
   for(auto c:traj_controls){
     // To be compliant with interfaces, a
     // conversion to degrees here is needed
-    
-    c[0] = c[0]*180/M_PI; 
-    c[2] = c[2]*180/M_PI;
+    c[1] = c[1]*180/M_PI; 
+    c[3] = c[3]*180/M_PI;
 
     cmd.seq_num = i;
     i++;
-    cmd.amount = c[0]+turn2;
+    cmd.amount = c[1]+turn2;
     cmd.action = FLAT_WALK_ROT_L; 
     cmd.normalize();
+    // Little HACK to correct meaningless rotations if present
+    if(cmd.amount>180 && c[0]==1){
+      cmd.amount-=180; 
+      c[2] = -c[2];
+      c[3] += 180;
+      while(c[3]>360) c[3]-= 360;
+      while(c[3]<0) c[3]+=360;
+    }
     controls.push_back(cmd);
     cmd.seq_num = i;
     i++;
-    cmd.amount = c[1];
-    cmd.action = FLAT_WALK_FWD;
+    cmd.amount = c[2];
+    cmd.action = (c[0]==0) ? FLAT_WALK_FWD : FLAT_WALK_SIDE_L;
     cmd.normalize();
     controls.push_back(cmd);
-    turn2 = c[2];
+    turn2 = c[3];
   }
   cmd.seq_num = i;
   cmd.amount = turn2;

@@ -1,6 +1,6 @@
 /* 
  *  YARP Implementation of a flat_walk_command message 
- *  acoording to the agreed interfaces. 
+ *  according to the agreed interfaces. 
  *
  *  email: v.varricchio@gmail.com 
  */

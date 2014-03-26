@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
   // Instantiating a simple grabber
   yarp_msg_simple_grabber <yarp::os::Bottle> g;
   
-  // Associating a grabber to a yarp port
+  // Associating a grabber to a yarp port, with a 4-seconds timeout
   g.grab_from_port(inputPort, 4);  // this can be even done before opening the port! :O
   
   inputPort.open("/test/input");

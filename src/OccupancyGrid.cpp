@@ -1,15 +1,4 @@
-
-#include <math.h>
-#include <vector>
-#include <stdio.h>
-#include <yarp/os/all.h>
-#include <assert.h>
-#include <boost/concept_check.hpp>
-#include <drc_shared/yarp_msgs/YARP_Header.h>
-#include <drc_shared/utils/OccupancyGrid.h>
-#include <map>
-
-/*  Quick (re)implementation of an OccupancyGrid
+/*  (Re)implementation of an OccupancyGrid
  *                
  *                         y ^
  *               .           |
@@ -25,6 +14,15 @@
  * 
  */
 
+#include <math.h>
+#include <vector>
+#include <stdio.h>
+#include <yarp/os/all.h>
+#include <assert.h>
+#include <boost/concept_check.hpp>
+#include <drc_shared/yarp_msgs/YARP_Header.h>
+#include <drc_shared/utils/OccupancyGrid.h>
+#include <map>
 
 OccupancyGrid::OccupancyGrid():width(0), height(0), u0(0), v0(0), cols(0), rows(0), resolution(0){
 }
