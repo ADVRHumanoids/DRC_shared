@@ -10,7 +10,7 @@
  *  (msg_t, e.g. yarp::os::Bottle) into a personalized datatype (out_t).
  *  If no conversion is needed, you can instantiate a yarp_msg_simple_grabber.
  *
- *  Please check grabber_hello_world.cpp for an example! :)
+ *  Please check drc_shared/src/examples/grabber_example.cpp for an example! :)
  *
  *  email: v.varricchio@gmail.com 
  */
