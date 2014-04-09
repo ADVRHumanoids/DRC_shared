@@ -1,4 +1,7 @@
 /* 
+ *  WARNING: This class was recently copy-pasted and renamed into yarp_status_interface,
+ *           and might disappear when a common agreement on the shared interfaces is reached
+ * 
  *  Small utility to stream a module's state as (a string + a Bottle)
  *  at a costant rate from a dedicated yarp::os::RateThread.
  * 
