@@ -19,7 +19,7 @@ yarp::os::ConstString flat_walk_plan::getTypeName() const {
 
 bool flat_walk_plan::read(yarp::os::ConnectionReader& connection) {
   controls.clear();
-  //status = connection.expectInt();
+  status = connection.expectInt();
   progress = connection.expectInt(); 
   int len = connection.expectInt();
   
@@ -31,11 +31,14 @@ bool flat_walk_plan::read(yarp::os::ConnectionReader& connection) {
   
   init_pose.read(connection);
   
+  iteration = connection.expectInt();
+  cost = connection.expectDouble();
+  
   return !connection.isError();
 }
 
 bool flat_walk_plan::write(yarp::os::ConnectionWriter& connection) {
-  //connection.appendInt(status);
+  connection.appendInt(status);
   connection.appendInt(progress);
   connection.appendInt(controls.size());
   
@@ -44,6 +47,9 @@ bool flat_walk_plan::write(yarp::os::ConnectionWriter& connection) {
   }
   
   init_pose.write(connection);
+  
+  connection.appendInt(iteration);
+  connection.appendDouble(cost);
   
   return !connection.isError();
 }

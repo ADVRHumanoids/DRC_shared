@@ -24,6 +24,9 @@ public:
   int progress;
   std::vector<flat_walk_cmd> controls;
   YARP_Point init_pose;
+  
+  int iteration;
+  double cost;
 
   flat_walk_plan();
   
