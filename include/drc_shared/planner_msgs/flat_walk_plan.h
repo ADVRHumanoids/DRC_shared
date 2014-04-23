@@ -16,6 +16,12 @@
 
 #include "flat_walk_cmd.h"
 
+#define FLAT_WALK_PLAN_WORKING -1
+#define FLAT_WALK_PLAN_SUCCESS 0
+#define FLAT_WALK_PLAN_NOSOLUTION 1
+#define FLAT_WALK_PLAN_GOALOBS 2
+#define FLAT_WALK_PLAN_STOPPED 3
+
 class flat_walk_plan : public yarp::os::Portable{
   
 public:
