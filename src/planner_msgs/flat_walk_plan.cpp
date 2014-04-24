@@ -164,3 +164,11 @@ void flat_walk_plan::from_rrts_unicycle_controls(const float* init_state, std::v
   cmd.normalize();
   controls.push_back(cmd);
 }
+
+void flat_walk_plan::clear(){
+  controls.clear();
+  status = 0;
+  cost = 0;
+  progress = 0;
+  iteration = 0;
+}
