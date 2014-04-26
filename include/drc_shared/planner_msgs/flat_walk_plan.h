@@ -57,6 +57,9 @@ public:
   void from_rrts_unicycle_controls(const float* init_state, std::vector<float*> traj_controls, int seq_num_offset = 0);
     
   void clear();
+
+  //void simplify();
+
 };
 
 #endif

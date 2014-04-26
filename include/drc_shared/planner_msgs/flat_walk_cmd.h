@@ -29,6 +29,7 @@ public:
   double amount;	// walking distance in meters and rotations in degrees
   int seq_num;
   static std::map<std::string, std::string> opposite;
+  static std::map<std::string, std::string> unit_symbol;
   static std::map<std::string, double> el;
 
   yarp::os::ConstString getTypeName() const;

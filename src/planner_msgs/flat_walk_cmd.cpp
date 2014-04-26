@@ -19,6 +19,8 @@ std::map<std::string,std::string> flat_walk_cmd::opposite = {
   {FLAT_WALK_SIDE_R, FLAT_WALK_SIDE_L}
 };
 
+// Amounts associated to elementary actions
+// (used to build a sequence of states from a command)
 std::map<std::string,double> flat_walk_cmd::el = {
   {FLAT_WALK_FWD, 0.05},
   {FLAT_WALK_BWD, 0.05},
@@ -28,12 +30,23 @@ std::map<std::string,double> flat_walk_cmd::el = {
   {FLAT_WALK_SIDE_R, 0.1}
 };
 
+std::map<std::string,std::string> flat_walk_cmd::unit_symbol = {
+  {FLAT_WALK_FWD, "m"},
+  {FLAT_WALK_BWD, "m"},
+  {FLAT_WALK_ROT_L, "deg"},
+  {FLAT_WALK_ROT_R, "deg"},
+  {FLAT_WALK_SIDE_L, "m"},
+  {FLAT_WALK_SIDE_R, "m"}
+};
+
 yarp::os::ConstString flat_walk_cmd::getTypeName() const {
   return "flat_walk_cmd";
 }
 
 
-flat_walk_cmd::flat_walk_cmd(){}
+flat_walk_cmd::flat_walk_cmd(){
+  action="";
+}
 
 bool flat_walk_cmd::read(yarp::os::ConnectionReader& connection) {
   action = connection.expectText();

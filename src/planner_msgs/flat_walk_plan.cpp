@@ -172,3 +172,14 @@ void flat_walk_plan::clear(){
   progress = 0;
   iteration = 0;
 }
+
+/*void flat_walk_plan::simplify(int offset=0){
+  std::vector<flat_walk_cmd> new_controls;
+  flat_walk_cmd tmp;
+  new_control.push_back(tmp);
+  for(auto cmd: controls){
+    if(!new_controls.back().add(cmd))
+      new_controls.push_back(cmd);
+  }
+  controls = new_controls;
+}*/
