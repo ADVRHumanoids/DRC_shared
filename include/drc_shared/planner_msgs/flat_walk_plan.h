@@ -44,9 +44,9 @@ public:
 
   // Utils
   
-  void append_cmd(const flat_walk_cmd&);
+  void append_cmd(const flat_walk_cmd&, bool simplify=true);
   
-  void append(const flat_walk_plan&);
+  void append(const flat_walk_plan&, bool simplify=true);
   
   std::vector<YARP_Point> to_path();
 

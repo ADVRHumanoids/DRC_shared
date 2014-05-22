@@ -104,18 +104,21 @@ Pose2D flat_walk_plan::next_pose(const Pose2D& ip, const flat_walk_cmd& cmd){
   return res;
 }
 
-void flat_walk_plan::append_cmd(const flat_walk_cmd& cmd){
+void flat_walk_plan::append_cmd(const flat_walk_cmd& cmd, bool simplify){
   if(controls.size()==0){
     controls.push_back(cmd);
   }else{
-    if(!controls.back().add(cmd)){
+    if(!simplify){
+      controls.push_back(cmd);
+      
+    }else if(!controls.back().add(cmd)){
       controls.push_back(cmd);
     }
   }
 }
 
-void flat_walk_plan::append(const flat_walk_plan& pl){
-  this->append_cmd(pl.controls[0]);
+void flat_walk_plan::append(const flat_walk_plan& pl, bool simplify){
+  this->append_cmd(pl.controls[0], simplify);
   for(size_t i=1; i<pl.controls.size(); i++)
     controls.push_back(pl.controls[i]);
 }
