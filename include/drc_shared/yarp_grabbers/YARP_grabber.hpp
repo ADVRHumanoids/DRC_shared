@@ -78,8 +78,12 @@ public:
     return yarp::os::Time::now()-last_stamp;
   }    
   
+  double get_timeout(){
+    return timeout_sec;
+  }
+  
   bool expired(){
-    if(timeout_sec<0) return false;
+    if(timeout_sec<=0) return false;
     if(get_timer() > timeout_sec){
       last_stamp = yarp::os::Time::now();
       return true;
