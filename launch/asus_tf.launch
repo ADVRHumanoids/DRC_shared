@@ -4,5 +4,5 @@
   <!--node name="asus_tf" type="static_transform_publisher" pkg="tf" args ="0.030 0.060 -0.030 0.000 1.431 0.0 /gaze /camera_link 10"/-->
 	
   <node name="asus_tf" type="static_transform_publisher" pkg="tf" args ="0.030 0.060 -0.030 0.000 1.309 0.0 /gaze /camera_link 10"/>
-
+  <node name="asus_tf_sim" type="static_transform_publisher" pkg="tf" args ="0 0 0 0 0 0 /gaze_sim /camera_link_sim 10"/>
 </launch>
