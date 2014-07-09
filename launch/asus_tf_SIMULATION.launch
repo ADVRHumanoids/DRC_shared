@@ -1,0 +1,5 @@
+<launch>
+	
+	<node name="asus_tf" type="static_transform_publisher" pkg="tf" args="0.0 0.0 0.0 -1.57 0.0 -1.57 /gaze /camera_link 10" /> <!--Simulated xtion pro live-->
+
+</launch>
