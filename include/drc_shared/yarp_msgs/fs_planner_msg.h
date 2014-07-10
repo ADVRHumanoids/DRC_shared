@@ -27,13 +27,13 @@ public:
 	
         return temp;
     }
-    void fromBottle(yarp::os::Bottle& temp)
+    void fromBottle(yarp::os::Bottle* temp)
     {
-        command = temp.get(0).asString();
+        command = temp->get(0).asString();
 	
 	if(command=="direction")
 	{
-	    yarp::os::Bottle* list=temp.get(0).asList();
+	    yarp::os::Bottle* list=temp->get(0).asList();
 	    x = list->get(0).asDouble();
 	    y = list->get(1).asDouble();
 	    z = list->get(2).asDouble();
