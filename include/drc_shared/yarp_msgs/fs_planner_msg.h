@@ -30,7 +30,23 @@ public:
     
     void fromBottle(yarp::os::Bottle* temp)
     {
+        if (temp->get(0).isNull())
+        {
+            command="";
+            return;
+        }
         yarp::os::Bottle* list = temp->get(0).asList();
+        if (list==NULL)
+        {
+            command="";
+            return;
+        }
+        if (list->get(0).isNull())
+        {
+            command="";
+            return;
+        }
+        
 	command = list->get(0).asString();
 
 	if(command=="direction")
