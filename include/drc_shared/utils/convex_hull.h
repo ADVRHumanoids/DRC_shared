@@ -61,7 +61,7 @@ public:
   */
  static void getSupportPolygonPoints( iDynUtils &robot,
                                       std::list<KDL::Vector>& points);
-private:
+protected:
     double _ransac_distance_thr;
     pcl::PointCloud<pcl::PointXYZ>::Ptr _pointCloud;
     pcl::PointCloud<pcl::PointXYZ>::Ptr _projectedPointCloud;

@@ -3,11 +3,9 @@
 
 <xacro:property name="PI" value="3.14159265359" />
 <xacro:property name="PI_2" value="1.57079632679" />
-<xacro:property name="print" value="true" />
 
 <xacro:macro name="floating_base_link" params="name">
 	<link name="floating_base_${name}"> 
-	<xacro:if value="${print}">
 	    <visual>
 	     <origin xyz="0 0 0" rpy="0 0 0" />
 	     <geometry>
@@ -17,7 +15,6 @@
 	       <color rgba="0 1.0 1.0 1.0"/>
 	     </material>
 	   </visual>
-	</xacro:if>
 	</link>
 </xacro:macro>
 
@@ -27,9 +24,7 @@
           <child link="floating_base_${child_link}"/>
           <origin xyz="0 0 0" rpy="0 0 0" />
           <axis xyz="${axis_xyz}" />
-          <xacro:if value="${print}">
-	    <limit velocity="1000.0" effort="1000.0" lower="-10.0" upper="10.0" />
-          </xacro:if>
+	  <limit velocity="1000.0" effort="1000.0" lower="-10.0" upper="10.0" />
         </joint>
 </xacro:macro>
 
