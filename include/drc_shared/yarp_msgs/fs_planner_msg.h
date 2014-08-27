@@ -11,7 +11,7 @@ class fs_planner_msg
 public:
     double x,y,z;
     std::string command;
-    
+    int num_steps;
     yarp::os::Bottle toBottle()
     {
         yarp::os::Bottle temp;
@@ -24,7 +24,10 @@ public:
 	    list.addDouble(y);
 	    list.addDouble(z);
 	}
-	
+	if (command=="plan_num")
+        {
+            list.addInt(num_steps);
+        }
         return temp;
     }
     
@@ -55,6 +58,10 @@ public:
 	    y = list->get(2).asDouble();
 	    z = list->get(3).asDouble();
 	}
+	if (command=="plan_num")
+        {
+            num_steps=list->get(1).asInt();
+        }
 
 	return;
     }
