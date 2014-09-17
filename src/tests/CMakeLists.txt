@@ -22,7 +22,7 @@ enable_testing()
 
 add_custom_target(  drc_shared_test ALL
                     COMMAND ${CMAKE_CTEST_COMMAND}
-                    DEPENDS drc_utils idynutils drc_shared tests_utils
+                    DEPENDS drc_shared_tests
                             CartesianUtilsTest
                             iDynUtilsTest
                             testUtilsTest

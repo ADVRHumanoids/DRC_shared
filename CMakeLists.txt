@@ -88,6 +88,8 @@ add_library(planner_msgs
   src/planner_msgs/flat_walk_plan.cpp
 )
 
+add_library(drc_shared_tests src/tests_utils.cpp)
+
 target_link_libraries(drc_utils    ${PCL_LIBRARIES}
                                    ${rosconsole_LIBRARIES})
 
@@ -110,6 +112,9 @@ target_link_libraries(idynutils ${moveit_core_LIBRARIES} ${srdfdom_LIBRARIES}
                                 ${kdl_codyco_LIBRARIES} ${iDynTree_LIBRARIES}
                                 ${orocos_kdl_LIBRARIES} ${urdf_LIBRARIES} ${kdl_parser_LIBRARIES}
                                 ${YARP_LIBRARIES} icubmod)
+
+target_link_libraries(drc_shared_tests drc_shared idynutils drc_utils planner_msgs tests_utils)
+
 
 install(TARGETS drc_shared planner_msgs idynutils drc_utils tests_utils
   grabber_example module_state_streamer_example # examples, comment this if not needed
