@@ -5,7 +5,6 @@
 #include <yarp/os/Portable.h>
 
 #include <yarp/os/Bottle.h>
-#include <boost/concept_check.hpp>
 #include <kdl_parser/kdl_parser.hpp>
 class trj_generator_input_msg
 {
