@@ -95,7 +95,7 @@ public:
 	    ro = list->get(4).asDouble();
 	    pi = list->get(5).asDouble();
 	    ya = list->get(6).asDouble();
-	    left_foot.M.RPY(ro,pi,ya);
+	    left_foot.M = KDL::Rotation::RPY(ro,pi,ya);
 	    
 	    right_foot.p.x(list->get(7).asDouble());
 	    right_foot.p.y(list->get(8).asDouble());
@@ -103,7 +103,7 @@ public:
 	    ro = list->get(10).asDouble();
 	    pi = list->get(11).asDouble();
 	    ya = list->get(12).asDouble();
-	    right_foot.M.RPY(ro,pi,ya);
+	    right_foot.M = KDL::Rotation::RPY(ro,pi,ya);
 	}
 	return;
     }

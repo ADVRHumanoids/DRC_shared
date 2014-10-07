@@ -80,7 +80,7 @@ public:
 	    ro = list->get(5).asDouble();
 	    pi = list->get(6).asDouble();
 	    ya = list->get(7).asDouble();
-	    start.M.RPY(ro,pi,ya);
+	    start.M = KDL::Rotation::RPY(ro,pi,ya);
 	    
 	    displacement.p.x(list->get(8).asDouble());
 	    displacement.p.y(list->get(9).asDouble());
@@ -88,7 +88,7 @@ public:
 	    ro = list->get(11).asDouble();
 	    pi = list->get(12).asDouble();
 	    ya = list->get(13).asDouble();
-	    displacement.M.RPY(ro,pi,ya);
+	    displacement.M = KDL::Rotation::RPY(ro,pi,ya);   
 	}
 	
 	if(command=="circle")
@@ -178,7 +178,7 @@ public:
 		ro = list->get(i++).asDouble();
 		pi = list->get(i++).asDouble();
 		ya = list->get(i++).asDouble();
-		frame.M.RPY(ro,pi,ya);
+		frame.M = KDL::Rotation::RPY(ro,pi,ya);
 		
 		trj[time]=frame;
 	    }
