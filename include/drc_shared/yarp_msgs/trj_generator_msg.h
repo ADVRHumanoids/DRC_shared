@@ -14,6 +14,11 @@ public:
     KDL::Frame start;
     KDL::Frame displacement;
     
+    bool left;
+    bool hand;
+    double center_angle;
+    double radius;
+    
     yarp::os::Bottle toBottle()
     {
         yarp::os::Bottle temp;
@@ -42,7 +47,28 @@ public:
 	}
 	if (command=="circle")
         {
-            list.addString("TODO");
+            list.addDouble(time);
+	    list.addInt(left);
+	    list.addInt(hand);
+	    list.addDouble(center_angle);
+	    list.addDouble(radius);
+	    
+	    list.addDouble(start.p.x());
+	    list.addDouble(start.p.y());
+	    list.addDouble(start.p.z());
+	    double ro,pi,ya;
+	    start.M.GetRPY(ro,pi,ya);
+	    list.addDouble(ro);
+	    list.addDouble(pi);
+	    list.addDouble(ya);
+	    
+	    list.addDouble(displacement.p.x());
+	    list.addDouble(displacement.p.y());
+	    list.addDouble(displacement.p.z());
+	    displacement.M.GetRPY(ro,pi,ya);
+	    list.addDouble(ro);
+	    list.addDouble(pi);
+	    list.addDouble(ya);
         }
         return temp;
     }
@@ -93,14 +119,29 @@ public:
 	
 	if(command=="circle")
 	{
-	    //TODO
-	    time = 1;
-	  
-	    start.p.Zero();
-	    start.M.Identity();
+	    time = list->get(1).asDouble();
 	    
-	    displacement.p.Zero();
-	    displacement.M.Identity();
+	    left = list->get(2).asInt();
+	    hand = list->get(3).asInt();
+	    center_angle = list->get(4).asDouble();
+	    radius = list->get(5).asDouble();
+	    
+	    start.p.x(list->get(6).asDouble());
+	    start.p.y(list->get(7).asDouble());
+	    start.p.z(list->get(8).asDouble());
+	    double ro,pi,ya;
+	    ro = list->get(9).asDouble();
+	    pi = list->get(10).asDouble();
+	    ya = list->get(11).asDouble();
+	    start.M = KDL::Rotation::RPY(ro,pi,ya);
+	    
+	    displacement.p.x(list->get(12).asDouble());
+	    displacement.p.y(list->get(13).asDouble());
+	    displacement.p.z(list->get(14).asDouble());
+	    ro = list->get(15).asDouble();
+	    pi = list->get(16).asDouble();
+	    ya = list->get(17).asDouble();
+	    displacement.M = KDL::Rotation::RPY(ro,pi,ya);   
 	}
 	
 	return;
