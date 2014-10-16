@@ -70,6 +70,26 @@ public:
 	    list.addDouble(pi);
 	    list.addDouble(ya);
         }
+        if (command=="bezier")
+	{
+	    list.addDouble(time);
+	    list.addDouble(start.p.x());
+	    list.addDouble(start.p.y());
+	    list.addDouble(start.p.z());
+	    double ro,pi,ya;
+	    start.M.GetRPY(ro,pi,ya);
+	    list.addDouble(ro);
+	    list.addDouble(pi);
+	    list.addDouble(ya);
+	    
+	    list.addDouble(displacement.p.x());
+	    list.addDouble(displacement.p.y());
+	    list.addDouble(displacement.p.z());
+	    displacement.M.GetRPY(ro,pi,ya);
+	    list.addDouble(ro);
+	    list.addDouble(pi);
+	    list.addDouble(ya);
+	}
         return temp;
     }
     
@@ -143,6 +163,28 @@ public:
 	    ya = list->get(17).asDouble();
 	    displacement.M = KDL::Rotation::RPY(ro,pi,ya);   
 	}
+	
+	if(command=="bezier")
+	{
+	    time = list->get(1).asDouble();
+	  
+	    start.p.x(list->get(2).asDouble());
+	    start.p.y(list->get(3).asDouble());
+	    start.p.z(list->get(4).asDouble());
+	    double ro,pi,ya;
+	    ro = list->get(5).asDouble();
+	    pi = list->get(6).asDouble();
+	    ya = list->get(7).asDouble();
+	    start.M = KDL::Rotation::RPY(ro,pi,ya);
+	    
+	    displacement.p.x(list->get(8).asDouble());
+	    displacement.p.y(list->get(9).asDouble());
+	    displacement.p.z(list->get(10).asDouble());
+	    ro = list->get(11).asDouble();
+	    pi = list->get(12).asDouble();
+	    ya = list->get(13).asDouble();
+	    displacement.M = KDL::Rotation::RPY(ro,pi,ya);   
+	}	
 	
 	return;
     }
