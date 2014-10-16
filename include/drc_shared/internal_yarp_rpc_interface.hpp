@@ -1,5 +1,5 @@
-#ifndef _INTERNAL_YARP_COMMAND_INTERFACE_H_
-#define _INTERNAL_YARP_COMMAND_INTERFACE_H_
+#ifndef _INTERNAL_YARP_RPC_INTERFACE_H_
+#define _INTERNAL_YARP_RPC_INTERFACE_H_
 #include <yarp/os/all.h>
 #include <yarp/dev/all.h>
 #include <vector>
@@ -19,7 +19,7 @@ namespace walkman
         template<class request_type, class response_type > class internal_yarp_rpc_client_interface
         {
         public:
-            internal_yarp_rpc_client_interface(const std::string& module_prefix_,const std::string& port_suffix,yarp::os::Network* network)
+            internal_yarp_rpc_client_interface(const std::string& module_prefix_,const std::string& port_suffix)
             {
 	        auto module_prefix=module_prefix_;
                 if (module_prefix[0]=='/') module_prefix=module_prefix.substr(1);
@@ -29,7 +29,7 @@ namespace walkman
                 client_port.open(temp_o.c_str());
                 yarp::os::ContactStyle style;
                 style.persistent = true;
-                network->connect(temp_o.c_str(),temp_i.c_str(), style);
+                yarp::os::Network::connect(temp_o.c_str(),temp_i.c_str(), style);
             }
             
             bool sendCommand(request_type& cmd, response_type& resp, int seq_num=0)
@@ -50,7 +50,7 @@ namespace walkman
         template<> class internal_yarp_rpc_client_interface<std::string,std::string>
         {
         public:
-            internal_yarp_rpc_client_interface(const std::string& module_prefix_,const std::string& port_suffix,yarp::os::Network* network)
+            internal_yarp_rpc_client_interface(const std::string& module_prefix_,const std::string& port_suffix)
             {
                 auto module_prefix=module_prefix_;
                 if (module_prefix[0]=='/') module_prefix=module_prefix.substr(1);
@@ -61,7 +61,7 @@ namespace walkman
                 client_port.open(temp_o.c_str());
                 yarp::os::ContactStyle style;
                 style.persistent = true;
-                network->connect(temp_o.c_str(),temp_i.c_str(), style);
+                yarp::os::Network::connect(temp_o.c_str(),temp_i.c_str(), style);
             }
             
             bool sendCommand(const std::string& cmd, std::string& resp, int seq_num=0)
@@ -177,12 +177,12 @@ namespace walkman
                 }
                 else
                 {
-                    std::string command_i= bot_command->get(0).asString();
+                    std::string command_i= bot_command.get(0).asString();
                     return command_i;
                 }
             }
             
-            bool reply(std::string &resp,int& seq_num=0)
+            bool reply(std::string &resp,int& seq_num)
             {
                 yarp::os::Bottle response;
                 response.clear();

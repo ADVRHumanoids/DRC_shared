@@ -94,14 +94,14 @@ public:
     }
     
     
-    void fromBottle(yarp::os::Bottle* temp)
+    void fromBottle(yarp::os::Bottle temp)
     {
-        if (temp->get(0).isNull())
+        if (temp.get(0).isNull())
         {
             command="";
             return;
         }
-        yarp::os::Bottle* list = temp->get(0).asList();
+        yarp::os::Bottle* list = temp.get(0).asList();
         if (list==NULL)
         {
             command="";
@@ -224,14 +224,14 @@ public:
     }
     
     
-    void fromBottle(yarp::os::Bottle* temp)
+    void fromBottle(yarp::os::Bottle temp)
     {
-        if (temp->get(0).isNull())
+        if (temp.get(0).isNull())
         {
             command="";
             return;
         }
-        yarp::os::Bottle* list = temp->get(0).asList();
+        yarp::os::Bottle* list = temp.get(0).asList();
         if (list==NULL)
         {
             command="";
