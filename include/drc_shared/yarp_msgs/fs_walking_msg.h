@@ -51,7 +51,6 @@ public:
             list.addDouble(current_right_foot.p.x());
             list.addDouble(current_right_foot.p.y());
             list.addDouble(current_right_foot.p.z());
-            double x,y,z,w;
             current_right_foot.M.GetQuaternion(x,y,z,w);
             list.addDouble(x);
             list.addDouble(y);
@@ -114,7 +113,6 @@ public:
             current_right_foot.p.x(list->get(counter++).asDouble());
             current_right_foot.p.y(list->get(counter++).asDouble());
             current_right_foot.p.z(list->get(counter++).asDouble());
-            double x,y,z,w;
             x = list->get(counter++).asDouble();
             y = list->get(counter++).asDouble();
             z = list->get(counter++).asDouble();

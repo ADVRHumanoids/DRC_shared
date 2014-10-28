@@ -12,7 +12,7 @@ public:
     double x,y,z;
     std::string command;
     int num_steps;
-    
+    std::string starting_foot;
     KDL::Frame left_foot;
     KDL::Frame right_foot;
     
@@ -28,6 +28,14 @@ public:
 	    list.addDouble(y);
 	    list.addDouble(z);
 	}
+	if (command=="set_starting_foot")
+        {
+            list.addString(starting_foot.c_str());
+        }
+	if (command=="send_plan_to_walking")
+        {
+            //Nothing to do for now
+        }
 	if (command=="plan_num")
         {
             list.addInt(num_steps);
@@ -73,9 +81,16 @@ public:
             command="";
             return;
         }
-        
-	command = list->get(0).asString();
 
+        command = list->get(0).asString();
+        if (command=="set_starting_foot")
+        {
+            starting_foot=list->get(1).asString();
+        }
+        if (command=="send_plan_to_walking")
+        {
+            //nothing to do for now
+        }
 	if(command=="direction")
 	{
 	    x = list->get(1).asDouble();
