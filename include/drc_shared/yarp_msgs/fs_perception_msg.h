@@ -19,14 +19,9 @@ public:
         yarp::os::Bottle& list= temp.addList();
 
 	list.addString(command);
-	if(command=="direction")
+	if(command=="send_stereo_cloud")
 	{
-	}
-	if (command=="plan_num")
-        {
-        }
-        if(command=="ik_check" || command=="ik_com_check" || command=="custom_step")
-	{
+	    list.addString(command);
 	}
         return temp;
     }
@@ -52,76 +47,12 @@ public:
 
         command = list->get(0).asString();
 
-	if(command=="direction")
-	{
-	}
-	if (command=="plan_num")
-        {
-        }
-        if(command=="ik_check" || command=="ik_com_check" || command=="custom_step")
-	{
+	if(command=="send_stereo_cloud") {
+	    //TODO
 	}
 	return;
     }
   
 };
 
-
-class fs_perception_patch_msg
-{
-public:
-    std::string command;
-    KDL::Frame patch;
-    yarp::os::Bottle toBottle()
-    {
-        yarp::os::Bottle temp;
-        yarp::os::Bottle& list= temp.addList();
-        
-        list.addString(command);
-        if(command=="direction")
-        {
-        }
-        if (command=="plan_num")
-        {
-        }
-        if(command=="ik_check" || command=="ik_com_check" || command=="custom_step")
-        {
-        }
-        return temp;
-    }
-    
-    void fromBottle(yarp::os::Bottle* temp)
-    {
-        if (temp->get(0).isNull())
-        {
-            command="";
-            return;
-        }
-        yarp::os::Bottle* list = temp->get(0).asList();
-        if (list==NULL)
-        {
-            command="";
-            return;
-        }
-        if (list->get(0).isNull())
-        {
-            command="";
-            return;
-        }
-        
-        command = list->get(0).asString();
-        
-        if(command=="direction")
-        {
-        }
-        if (command=="plan_num")
-        {
-        }
-        if(command=="ik_check" || command=="ik_com_check" || command=="custom_step")
-        {
-        }
-        return;
-    }
-    
-};
 #endif // FS_PLANNER_MSG
