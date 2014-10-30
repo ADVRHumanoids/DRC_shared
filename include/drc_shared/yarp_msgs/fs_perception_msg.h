@@ -32,14 +32,14 @@ public:
     fs_perception_msg()
     {
 	command="";
-	image_fps=0.0;
+	image_quality=0.0;
 	left_image=true;
 	point_option="";
     }
   
     std::string command;
     
-    double image_fps;
+    double image_quality;
     
     std::string point_option;
     bool left_image;
@@ -57,7 +57,7 @@ public:
 	if(command=="send_image")
 	{
 	    list.addInt(left_image);
-	    list.addDouble(image_fps);
+	    list.addDouble(image_quality);
 	}
 	if(command=="focus_on_region")
 	{
@@ -99,7 +99,7 @@ public:
 	if(command=="send_image")
 	{
 	    left_image = list->get(1).asInt();
-	    image_fps = list->get(2).asDouble();
+	    image_quality = list->get(2).asDouble();
 	}
 	if(command=="focus_on_region")
 	{    
