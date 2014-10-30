@@ -83,7 +83,7 @@ public:
         }
 
         command = list->get(0).asString();
-        if (command=="set_starting_foot")
+        if (command=="set_stance_foot")
         {
             starting_foot=list->get(1).asString();
         }
