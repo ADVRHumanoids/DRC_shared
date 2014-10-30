@@ -11,6 +11,8 @@
 class point_2d
 {
 public:
+    point_2d(double x_=0.0, double y_=0.0){x=x_;y=y_;}
+  
     double x;
     double y;
 };
@@ -18,6 +20,8 @@ public:
 class region
 {
 public:
+    region():start(0.0,0.0),end(1.0,1.0){}
+    
     point_2d start;
     point_2d end;
 };
@@ -25,6 +29,14 @@ public:
 class fs_perception_msg
 {
 public:
+    fs_perception_msg()
+    {
+	command="";
+	image_fps=0.0;
+	left_image=true;
+	point_option="";
+    }
+  
     std::string command;
     
     double image_fps;
