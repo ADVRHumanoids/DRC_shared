@@ -13,9 +13,11 @@ public:
     {
 	command="";
 	frame="";
-	valve_data.p = KDL::Vector::Zero();
+	valve_data.p.x(0.25);
+	valve_data.p.y(0.0);
+	valve_data.p.z(0.2);
 	valve_data.M = KDL::Rotation::Identity();
-	radius=1.0;
+	radius=0.13;
     }
   
     std::string command;
@@ -33,7 +35,7 @@ public:
 
 	list.addString(command);
 
-	if(command=="valve_data")
+	if(command=="valvedatasent")
 	{
 	    list.addString(frame);
 	    list.addDouble(valve_data.p.x());
@@ -71,7 +73,7 @@ public:
 
         command = list->get(0).asString();
 
-	if(command=="valve_data")
+	if(command=="valvedatasent")
 	{
 	    frame = list->get(1).asString();
 	    valve_data.p.x(list->get(2).asDouble());
