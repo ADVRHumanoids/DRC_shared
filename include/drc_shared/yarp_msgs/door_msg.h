@@ -6,18 +6,18 @@
 #include <yarp/os/Bottle.h>
 #include <kdl/frames.hpp>
 
-class valve_msg
+class door_msg
 {
 public:
-    valve_msg()
+    door_msg()
     {
 	// TODO ADD RIGHT CUSTOM DATA
 	command="";
 	frame="";
-	valve_data.p.x(0.0);
-	valve_data.p.y(0.0);
-	valve_data.p.z(0.0);
-	valve_data.M = KDL::Rotation::Identity();
+	door_data.p.x(0.0);
+	door_data.p.y(0.0);
+	door_data.p.z(0.0);
+	door_data.M = KDL::Rotation::Identity();
 	handle_length=0.1;
 	door_width=0.5;
     }
@@ -26,7 +26,7 @@ public:
     
     std::string frame;
     
-    KDL::Frame valve_data;
+    KDL::Frame door_data;
     
     double handle_length, door_width;
 
@@ -40,11 +40,11 @@ public:
 	if(command=="doordatasent")
 	{
 	    list.addString(frame);
-	    list.addDouble(valve_data.p.x());
-	    list.addDouble(valve_data.p.y());
-	    list.addDouble(valve_data.p.z());
+	    list.addDouble(door_data.p.x());
+	    list.addDouble(door_data.p.y());
+	    list.addDouble(door_data.p.z());
 	    double ro,pi,ya;
-	    valve_data.M.GetRPY(ro,pi,ya);
+	    door_data.M.GetRPY(ro,pi,ya);
 	    list.addDouble(ro);
 	    list.addDouble(pi);
 	    list.addDouble(ya);
@@ -79,14 +79,14 @@ public:
 	if(command=="doordatasent")
 	{
 	    frame = list->get(1).asString();
-	    valve_data.p.x(list->get(2).asDouble());
-	    valve_data.p.y(list->get(3).asDouble());
-	    valve_data.p.z(list->get(4).asDouble());
+	    door_data.p.x(list->get(2).asDouble());
+	    door_data.p.y(list->get(3).asDouble());
+	    door_data.p.z(list->get(4).asDouble());
 	    double ro,pi,ya;
 	    ro = list->get(5).asDouble();
 	    pi = list->get(6).asDouble();
 	    ya = list->get(7).asDouble();
-	    valve_data.M = KDL::Rotation::RPY(ro,pi,ya);
+	    door_data.M = KDL::Rotation::RPY(ro,pi,ya);
 	    handle_length = list->get(8).asDouble();
 	    door_width = list->get(9).asDouble();
 	}
