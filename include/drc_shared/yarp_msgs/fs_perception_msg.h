@@ -26,10 +26,11 @@ public:
     point_2d end;
 };
 
-class fs_perception_msg
+
+class generic_perception_msg
 {
 public:
-    fs_perception_msg()
+    generic_perception_msg()
     {
 	command="";
 	image_quality=0.0;
@@ -114,6 +115,48 @@ public:
 	    point.y = list->get(2).asDouble();
 	    point_option = list->get(3).asString();
 	}
+	return;
+    }
+  
+};
+
+
+class fs_perception_msg
+{
+public:
+    fs_perception_msg()
+    {
+    }
+    
+    std::string command;
+  
+    yarp::os::Bottle toBottle()
+    {
+        yarp::os::Bottle temp;
+        return temp;
+    }
+
+    void fromBottle(yarp::os::Bottle* temp)
+    {
+        if (temp->get(0).isNull())
+        {
+            command="";
+            return;
+        }
+        yarp::os::Bottle* list = temp->get(0).asList();
+        if (list==NULL)
+        {
+            command="";
+            return;
+        }
+        if (list->get(0).isNull())
+        {
+            command="";
+            return;
+        }
+
+        command = list->get(0).asString();
+
 	return;
     }
   
