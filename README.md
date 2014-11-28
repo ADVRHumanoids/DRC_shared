@@ -37,3 +37,70 @@ It contains:
  * YARP_Point.h
  * YARP_Pose.h
  * YARP_Quaternion.h
+ 
+ 
+# How to add a new message
+
+- Create a new file similar to the following one:
+
+```javascript
+#ifndef A_NAME_MSG_H
+#define A_NAME_MSG_H
+
+#include <yarp/os/Portable.h>
+#include <yarp/os/Bottle.h>
+
+/*
+ * MESSAGE STRUCTURE EXAMPLE
+ * 
+ * N° of joints | "robot joints" | values
+ * 
+ * e.g: 3 robot joints 0.3 0.4 0.1
+ * 
+ */
+
+class a_name_msg
+{
+public:
+    
+    //DATA STRUCTURE HERE, make your own
+    std::map<std::string,double> joints;
+        
+    yarp::os::Bottle toBottle()
+    {
+        yarp::os::Bottle temp;
+        yarp::os::Bottle& list= temp.addList();
+
+        //ADD YOUR OWN STUFF HERE
+    	list.addString("robot joints");
+    	list.addInt(joints.size());
+    	for(std::map<std::string,double>::iterator it=joints.begin();it!=joints.end();++it)
+    	{
+    	    list.addString(it->first);
+    	    list.addDouble(it->second);
+    	}
+    	
+        return temp;
+    }
+    
+    void fromBottle(yarp::os::Bottle* temp)
+    {
+        yarp::os::Bottle* list = temp->get(0).asList();
+	
+	    //READ YOUR OWN STUFF HERE IN THE SAME ORDER AS WRITING
+    	std::string header = list->get(0).asString();
+    	int joint_number = list->get(1).asInt();
+    	unsigned int j=2;
+    	for(unsigned int i=0; i<joint_number;i++)
+    	{
+    	    joints[list->get(j).asString()] = list->get(j+1).asDouble(); 
+    	    j+=2;
+    	}
+    
+    	return;
+    }
+  
+};
+
+#endif // A_NAME_MSG_H
+```
