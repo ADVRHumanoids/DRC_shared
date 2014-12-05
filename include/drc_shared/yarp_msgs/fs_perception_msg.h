@@ -2,6 +2,7 @@
 #define FS_PERCEPTION_MSG
 
 #include <string>
+#include <vector>
 #include <yarp/os/Portable.h>
 
 #include <yarp/os/Bottle.h>
@@ -120,19 +121,37 @@ public:
   
 };
 
-
+namespace fs_perception{
+struct point{
+    double x,y,z;
+};
+}
 class fs_perception_msg
 {
 public:
     fs_perception_msg()
     {
     }
+
     
     std::string command;
-  
+    std::vector<fs_perception::point> seeds;
     yarp::os::Bottle toBottle()
     {
         yarp::os::Bottle temp;
+        yarp::os::Bottle& list= temp.addList();
+        list.addString(command);
+        
+        if (command=="seeds")
+        {
+            list.addInt(seeds.size());
+            for (auto seed:seeds)
+            {
+                list.addDouble(seed.x);
+                list.addDouble(seed.y);
+                list.addDouble(seed.z);
+            }
+        }
         return temp;
     }
 
@@ -157,6 +176,17 @@ public:
 
         command = list->get(0).asString();
 
+        if (command=="seeds")
+        {
+            int counter=1;
+            seeds.resize(list->get(counter++).asInt());
+            for (int i=0;i<seeds.size();i++)
+            {
+                seeds[i].x=list->get(counter++).asDouble();
+                seeds[i].y=list->get(counter++).asDouble();
+                seeds[i].z=list->get(counter++).asDouble();
+            }
+        }
 	return;
     }
   
