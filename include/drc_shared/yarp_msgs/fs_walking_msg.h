@@ -86,7 +86,6 @@ public:
 	if(command=="steps")
 	{
             int steps_size=list->get(counter++).asInt();
-            steps.resize(steps_size);
             for (int i=0;i<steps_size;i++)
             {
                 KDL::Frame step;
