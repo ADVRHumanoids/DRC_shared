@@ -39,7 +39,7 @@ namespace walkman
                 b.append(cmd.toBottle());
 		b.addInt(seq_num);
                 client_port.write(b,response);
-                resp.fromBottle(response);
+                resp.fromBottle(&response);
                 return true;
             }
         private:
