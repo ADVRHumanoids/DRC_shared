@@ -115,13 +115,13 @@ namespace walkman
                 else
                 {
                     seq_num = bot_command.pop().asInt();
-		    command_i.fromBottle(bot_command);
+		    command_i.fromBottle(&bot_command);
 		    cmd=command_i;
 		    return true;
                 }
             }
             
-            bool reply(response_type &resp,int& seq_num)
+            bool reply(response_type &resp,int seq_num)
             {
                 yarp::os::Bottle response;
                 response.clear();

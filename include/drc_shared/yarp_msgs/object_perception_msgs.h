@@ -58,7 +58,7 @@ public:
     std::string reference_frame;
     double radius;
     KDL::Frame object_pose;
-    
+    std::string status;
     yarp::os::Bottle toBottle()
     {
         yarp::os::Bottle temp;
@@ -77,6 +77,7 @@ public:
 	list.addDouble(qz);
 	list.addDouble(qw);
 
+  list.addString(status);
         return temp;
     }
     
@@ -119,6 +120,7 @@ public:
 	qw = list->get(8).asDouble();
 	object_pose.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
 
+  status=list->get(9).asString();
 	return;
     }
   
