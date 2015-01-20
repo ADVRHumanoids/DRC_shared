@@ -70,11 +70,12 @@ public:
 	list.addDouble(object_pose.p.x());
 	list.addDouble(object_pose.p.y());
 	list.addDouble(object_pose.p.z());
-	double ro,pi,ya;
-	object_pose.M.GetRPY(ro,pi,ya);
-	list.addDouble(ro);
-	list.addDouble(pi);
-	list.addDouble(ya);
+	double qx,qy,qz,qw;
+	object_pose.M.GetQuaternion(qx,qy,qz,qw);
+	list.addDouble(qx);
+	list.addDouble(qy);
+	list.addDouble(qz);
+	list.addDouble(qw);
 
         return temp;
     }
@@ -106,16 +107,17 @@ public:
         }
 
         reference_frame = list->get(0).asString();
-        radius=list->get(1).asString();
+        radius=list->get(1).asDouble();
         
 	object_pose.p.x(list->get(2).asDouble());
 	object_pose.p.y(list->get(3).asDouble());
 	object_pose.p.z(list->get(4).asDouble());
-	double ro,pi,ya;
-	ro = list->get(5).asDouble();
-	pi = list->get(6).asDouble();
-	ya = list->get(7).asDouble();
-	object_pose.M = KDL::Rotation::RPY(ro,pi,ya);
+	double qx,qy,qz,qw;
+	qx = list->get(5).asDouble();
+	qy = list->get(6).asDouble();
+	qz = list->get(7).asDouble();
+	qw = list->get(8).asDouble();
+	object_pose.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
 
 	return;
     }
