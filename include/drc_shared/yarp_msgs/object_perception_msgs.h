@@ -89,6 +89,7 @@ public:
             reference_frame="";
 	    radius=0;
 	    object_pose = KDL::Frame::Identity();
+	    status="";
             return;
         }
         yarp::os::Bottle* list = temp->get(0).asList();
@@ -97,6 +98,7 @@ public:
             reference_frame="";
 	    radius=0;
 	    object_pose = KDL::Frame::Identity();
+	    status="";
             return;
         }
         if (list->get(0).isNull())
@@ -104,6 +106,7 @@ public:
             reference_frame="";
 	    radius=0;
 	    object_pose = KDL::Frame::Identity();
+	    status="";
             return;
         }
 
