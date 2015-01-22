@@ -69,15 +69,18 @@ public:
 
 	double qx,qy,qz,qw;
 
+	poses.clear();
+
 	for(int i=2;i<2+pose_number*7;)
 	{
-	    std::string temp_str = list->get(i++).asString();
+	    std::string temp_str = list->get(i).asString();
 
-	    poses[temp_str].p.x(list->get(i++).asDouble());
-	    poses[temp_str].p.y(list->get(i++).asDouble());
-	    poses[temp_str].p.z(list->get(i++).asDouble());
+	    poses[temp_str].p.x(list->get(i+1).asDouble());
+	    poses[temp_str].p.y(list->get(i+2).asDouble());
+	    poses[temp_str].p.z(list->get(i+3).asDouble());
 	    
-	    poses[temp_str].M = KDL::Rotation::Quaternion(list->get(i++).asDouble(),list->get(i++).asDouble(),list->get(i++).asDouble(),list->get(i++).asDouble());
+	    poses[temp_str].M = KDL::Rotation::Quaternion(list->get(i+4).asDouble(),list->get(i+5).asDouble(),list->get(i+6).asDouble(),list->get(i+7).asDouble());
+	    i+=8;
 	}
 
 	return;
