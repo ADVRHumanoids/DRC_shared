@@ -58,6 +58,18 @@ public:
             list.addDouble(w);
             list.addString(starting_foot.c_str());
 	}
+	if (command=="go_there")
+        {
+            list.addDouble(steps.front().p.x());
+            list.addDouble(steps.front().p.y());
+            list.addDouble(steps.front().p.z());
+            double x,y,z,w;
+            steps.front().M.GetQuaternion(x,y,z,w);
+            list.addDouble(x);
+            list.addDouble(y);
+            list.addDouble(z);
+            list.addDouble(w);
+        }
         return temp;
     }
 
@@ -119,6 +131,20 @@ public:
             current_right_foot.M = KDL::Rotation::Quaternion(x,y,z,w);
             starting_foot=list->get(counter++).asString();
 	}
+	if (command=="go_there")
+        {
+            KDL::Frame step;
+            step.p.x(list->get(counter++).asDouble());
+            step.p.y(list->get(counter++).asDouble());
+            step.p.z(list->get(counter++).asDouble());
+            double x,y,z,w;
+            x = list->get(counter++).asDouble();
+            y = list->get(counter++).asDouble();
+            z = list->get(counter++).asDouble();
+            w = list->get(counter++).asDouble();
+            step.M = KDL::Rotation::Quaternion(x,y,z,w);
+            steps.push_back(step);
+        }
 	return;
     }
   
