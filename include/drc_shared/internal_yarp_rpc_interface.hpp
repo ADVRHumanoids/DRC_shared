@@ -9,7 +9,8 @@
 #include <yarp/os/Bottle.h>
 #include <mutex>
 #include <boost/concept_check.hpp>
-
+#include <yarp/os/BufferedPort.h>
+#include <GYM/internal_yarp_command_interface.hpp>
 
 namespace walkman
 {
@@ -23,27 +24,27 @@ namespace walkman
             {
 	        auto module_prefix=module_prefix_;
                 if (module_prefix[0]=='/') module_prefix=module_prefix.substr(1);
-                std::string temp_o="/"+module_prefix+port_suffix+"_rpc:o";
-                std::string temp_i="/"+module_prefix+port_suffix+"_rpc:i";
-                
-                client_port.open(temp_o.c_str());
-                yarp::os::ContactStyle style;
-                style.persistent = true;
-                yarp::os::Network::connect(temp_o.c_str(),temp_i.c_str(), style);
+                std::string temp="/"+port_suffix+"_rpc_client";
+                sender=new internal_yarp_command_sender_interface<request_type>(module_prefix,temp);
+                receiver=new internal_yarp_command_interface<response_type>(module_prefix,temp);
             }
             
             bool sendCommand(request_type& cmd, response_type& resp, int seq_num=0)
             {
-                yarp::os::Bottle b, response;
-		b.clear();
-                b.append(cmd.toBottle());
-		b.addInt(seq_num);
-                client_port.write(b,response);
-                resp.fromBottle(&response);
+//                 yarp::os::Bottle b, response;
+// 		b.clear();
+//              b.append(cmd.toBottle());
+// 		b.addInt(seq_num);
+                sender->sendCommand(cmd,seq_num);
+//                 client_port.write(b,response);
+                receiver->getCommand(resp,true); //Client will block until a response!!
+//                 resp.fromBottle(&response);
                 return true;
             }
         private:
-            yarp::os::RpcClient client_port;
+            internal_yarp_command_interface<response_type>* receiver;
+            internal_yarp_command_sender_interface<request_type>* sender;
+//             yarp::os::RpcClient client_port;
         };
         
         
@@ -54,39 +55,26 @@ namespace walkman
             {
                 auto module_prefix=module_prefix_;
                 if (module_prefix[0]=='/') module_prefix=module_prefix.substr(1);
-                std::string temp_o="/"+module_prefix+port_suffix+"_rpc:o";
-                std::string temp_i="/"+module_prefix+port_suffix+"_rpc:i";
-                client_port.setRpcMode(true);
-                
-                client_port.open(temp_o.c_str());
-                yarp::os::ContactStyle style;
-                style.persistent = true;
-                yarp::os::Network::connect(temp_o.c_str(),temp_i.c_str(), style);
+                std::string temp="/"+port_suffix+"_rpc_client";
+                sender=new internal_yarp_command_sender_interface<std::string>(module_prefix,temp);
+                receiver=new internal_yarp_command_interface<std::string>(module_prefix,temp);
             }
             
             bool sendCommand(const std::string& cmd, std::string& resp, int seq_num=0)
             {   
-                yarp::os::Bottle b, response;
-                b.clear();
-                b.addString(cmd);
-                b.addInt(seq_num);
-                client_port.write(b,response);
-                resp=response.get(0).asString();
-                return true;
+                sender->sendCommand(cmd,seq_num);
+                receiver->getCommand(resp,true); //Client will block until a response!!
             }
             
             bool sendCommand(int cmd, int& resp, int seq_num=0)
             {
-                yarp::os::Bottle b, response;
-                b.clear();
-                b.addInt(cmd);
-                client_port.write(b,response);
-                resp=response.get(0).asInt();
-                return true;
+                sender->sendCommand(cmd,seq_num);
+                receiver->getCommand(resp,true); //Client will block until a response!!
             }
             
         private:
-            yarp::os::RpcClient client_port;
+            internal_yarp_command_interface<std::string>* receiver;
+            internal_yarp_command_sender_interface<std::string>* sender;
         };
         
         
@@ -98,132 +86,101 @@ namespace walkman
             
             internal_yarp_rpc_server_interface(const std::string& module_prefix,const std::string& port_suffix)
             {
-                std::string temp="/"+module_prefix+port_suffix+"_rpc:i";
-                server_port.open(temp.c_str());
-                server_port.setRpcMode(true);
-                
+                std::string temp="/"+port_suffix+"_rpc_server";
+                sender=new internal_yarp_command_sender_interface<response_type>(module_prefix,temp);
+                receiver=new internal_yarp_command_interface<receive_type>(module_prefix,temp);
             }
             
             bool getCommand ( receive_type& cmd, int& seq_num )
             {
-                yarp::os::Bottle bot_command;
-                seq_num=-1;
-                if (!server_port.read(bot_command))
-                {
-                    return false;
-                }
-                else
-                {
-                    seq_num = bot_command.pop().asInt();
-		    command_i.fromBottle(&bot_command);
-		    cmd=command_i;
-		    return true;
-                }
+                return receiver->getCommand(cmd,seq_num);
+//                 yarp::os::Bottle bot_command;
+//                 seq_num=-1;
+//                 
+//                 if (!server_port.read(bot_command))
+//                 {
+//                     return false;
+//                 }
+//                 else
+//                 {
+//                     seq_num = bot_command.pop().asInt();
+// 		    command_i.fromBottle(&bot_command);
+// 		    cmd=command_i;
+// 		    return true;
+//                 }
             }
-            
+
+            ~internal_yarp_rpc_server_interface()
+            {
+//                 server_port.close();
+            }
+
             bool reply(response_type &resp,int seq_num)
             {
-                yarp::os::Bottle response;
-                response.clear();
-                response.append(resp.toBottle());
-                response.addInt(seq_num);
-                server_port.reply(response);
+//                 yarp::os::Bottle response;
+//                 response.clear();
+//                 response.append(resp.toBottle());
+//                 response.addInt(seq_num);
+//                 server_port.reply(response);
+                return sender->sendCommand(resp,seq_num);
             }
-            
+
         private:
             receive_type command_i;
-            yarp::os::RpcServer server_port;
+            internal_yarp_command_interface<receive_type>* receiver;
+            internal_yarp_command_sender_interface<response_type>* sender;
+//             yarp::os::RpcServer server_port;
         };
         
         template<> class internal_yarp_rpc_server_interface<std::string,std::string>
         {
         public:
-            
             internal_yarp_rpc_server_interface(const std::string& module_prefix,const std::string& port_suffix)
             {
-                std::string temp="/"+module_prefix+port_suffix+"_rpc:i";
-                server_port.open(temp.c_str());
-                server_port.setRpcMode(true);
+                std::string temp="/"+port_suffix+"_rpc_server";
+                sender=new internal_yarp_command_sender_interface<std::string>(module_prefix,temp);
+                receiver=new internal_yarp_command_interface<std::string>(module_prefix,temp);
             }
-            
+
             bool getCommand(int& command)
             {
-                yarp::os::Bottle bot_command;
-                if (!server_port.read(bot_command))
-                {
-                    return false;
-                }
-                else
-                {
-                    command= bot_command.get(0).asInt();
-                    return true;
-                }
+                return receiver->getCommand(command);
             }
-            
+
             bool reply(int resp)
             {
-                yarp::os::Bottle response;
-                response.clear();
-                response.addInt(resp);
-                server_port.reply(response);
+                return sender->sendCommand(resp);
             }
-            
+
             std::string getCommand()
             {
-                yarp::os::Bottle bot_command;
-                if (!server_port.read(bot_command))
-                {
-                    return "";
-                }
-                else
-                {
-                    std::string command_i= bot_command.get(0).asString();
-                    return command_i;
-                }
+                return receiver->getCommand();
             }
-            
+
             bool reply(std::string &resp,int& seq_num)
             {
-                yarp::os::Bottle response;
-                response.clear();
-                response.addString(resp);
-                response.addInt(seq_num);
-                server_port.reply(response);
+                return sender->sendCommand(resp,seq_num);
             }
-            
+
             bool getCommand (std::string & cmd)
             {
-                yarp::os::Bottle bot_command;
-                if (!server_port.read(bot_command))
-                {
-                    cmd="";
-                    return false;
-                }
-                else
-                {
-                    cmd=bot_command.get(0).asString();
-                    return true;
-                }
+                return receiver->getCommand(cmd);
             }
-            
+
             bool getCommand ( std::string& cmd, int& seq_num )
             {
-                yarp::os::Bottle bot_command;
-                seq_num=-1;
-                if (!server_port.read(bot_command))
-                {
-                    return false;
-                }
-                else
-                {
-                    seq_num = bot_command.pop().asInt();
-                    cmd=bot_command.get(0).asString();
-                    return true;
-                }
+                return receiver->getCommand(cmd,seq_num);
+            }
+
+            ~internal_yarp_rpc_server_interface()
+            {
+
             }
 
         private:
-            yarp::os::RpcServer server_port;
+            std::string command_i;
+            internal_yarp_command_interface<std::string>* receiver;
+            internal_yarp_command_sender_interface<std::string>* sender;
         };
     }
 }
