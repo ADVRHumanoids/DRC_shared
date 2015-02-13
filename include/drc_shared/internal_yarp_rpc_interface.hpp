@@ -24,9 +24,10 @@ namespace walkman
             {
 	        auto module_prefix=module_prefix_;
                 if (module_prefix[0]=='/') module_prefix=module_prefix.substr(1);
-                std::string temp="/"+port_suffix+"_rpc_client";
-                sender=new internal_yarp_command_sender_interface<request_type>(module_prefix,temp);
-                receiver=new internal_yarp_command_interface<response_type>(module_prefix,temp);
+                std::string temp_i=port_suffix+"_client:i";
+                std::string temp_o=port_suffix+"_server";
+                sender=new internal_yarp_command_sender_interface<request_type>(module_prefix,temp_o);
+                receiver=new internal_yarp_command_interface<response_type>(module_prefix,temp_i);
             }
             
             bool sendCommand(request_type& cmd, response_type& resp, int seq_num=0)
@@ -37,7 +38,7 @@ namespace walkman
 // 		b.addInt(seq_num);
                 sender->sendCommand(cmd,seq_num);
 //                 client_port.write(b,response);
-                receiver->getCommand(resp,true); //Client will block until a response!!
+                receiver->getCommand(resp,seq_num,true); //Client will block until a response!!
 //                 resp.fromBottle(&response);
                 return true;
             }
@@ -55,9 +56,10 @@ namespace walkman
             {
                 auto module_prefix=module_prefix_;
                 if (module_prefix[0]=='/') module_prefix=module_prefix.substr(1);
-                std::string temp="/"+port_suffix+"_rpc_client";
-                sender=new internal_yarp_command_sender_interface<std::string>(module_prefix,temp);
-                receiver=new internal_yarp_command_interface<std::string>(module_prefix,temp);
+                std::string temp_i=port_suffix+"_client:i";
+                std::string temp_o=port_suffix+"_server";
+                sender=new internal_yarp_command_sender_interface<std::string>(module_prefix,temp_o);
+                receiver=new internal_yarp_command_interface<std::string>(module_prefix,temp_i);
             }
             
             bool sendCommand(const std::string& cmd, std::string& resp, int seq_num=0)
@@ -86,9 +88,10 @@ namespace walkman
             
             internal_yarp_rpc_server_interface(const std::string& module_prefix,const std::string& port_suffix)
             {
-                std::string temp="/"+port_suffix+"_rpc_server";
-                sender=new internal_yarp_command_sender_interface<response_type>(module_prefix,temp);
-                receiver=new internal_yarp_command_interface<receive_type>(module_prefix,temp);
+                std::string temp_i=port_suffix+"_server:i";
+                std::string temp_o=port_suffix+"_client";
+                sender=new internal_yarp_command_sender_interface<response_type>(module_prefix,temp_o);
+                receiver=new internal_yarp_command_interface<receive_type>(module_prefix,temp_i);
             }
             
             bool getCommand ( receive_type& cmd, int& seq_num )
@@ -137,9 +140,10 @@ namespace walkman
         public:
             internal_yarp_rpc_server_interface(const std::string& module_prefix,const std::string& port_suffix)
             {
-                std::string temp="/"+port_suffix+"_rpc_server";
-                sender=new internal_yarp_command_sender_interface<std::string>(module_prefix,temp);
-                receiver=new internal_yarp_command_interface<std::string>(module_prefix,temp);
+                std::string temp_i=port_suffix+"_server:i";
+                std::string temp_o=port_suffix+"_client";
+                sender=new internal_yarp_command_sender_interface<std::string>(module_prefix,temp_o);
+                receiver=new internal_yarp_command_interface<std::string>(module_prefix,temp_i);
             }
 
             bool getCommand(int& command)
