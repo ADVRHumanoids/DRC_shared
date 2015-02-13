@@ -35,27 +35,14 @@ file(GLOB_RECURSE drc_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/include" *.h)
 find_package(YARP 2.3.60)
 include_directories(${YARP_INCLUDE_DIRS})
 
-add_subdirectory(src/MotorControlHelpers)
-
 ## Declare drc_shared library
 add_library(drc_shared SHARED   src/OccupancyGrid.cpp
-                                src/utils/module_state_streamer.cpp
                                 src/planner_msgs/flat_walk_cmd.cpp
                                 src/planner_msgs/flat_walk_plan.cpp
                                 ${drc_INCLUDES})
 
 target_link_libraries(drc_shared   PUBLIC   ${YARP_LIBRARIES}
                                    PRIVATE  ${PCL_LIBRARIES})
-
-# examples
-add_executable(grabber_example src/examples/grabber_example.cpp)
-add_executable(module_state_streamer_example src/examples/module_state_streamer_example.cpp)
-target_link_libraries(module_state_streamer_example
-                      ${YARP_LIBRARIES}
-                      drc_shared)
-                      
-target_link_libraries(grabber_example
-		                ${YARP_LIBRARIES})
 
 
 target_include_directories(drc_shared PUBLIC "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>"
