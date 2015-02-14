@@ -59,6 +59,8 @@ public:
     double radius;
     KDL::Frame object_pose;
     std::string status;
+    int affordances_number;
+    std::vector<KDL::Frame> affordances;
     yarp::os::Bottle toBottle()
     {
         yarp::os::Bottle temp;
@@ -78,6 +80,22 @@ public:
 	list.addDouble(qw);
 
   list.addString(status);
+
+	list.addInt(affordances_number);
+
+	for(int i=0;i<affordances_number;i++)
+	{
+	    list.addDouble(affordances.at(i).p.x());
+	    list.addDouble(affordances.at(i).p.y());
+	    list.addDouble(affordances.at(i).p.z());
+	    double qx,qy,qz,qw;
+	    affordances.at(i).M.GetQuaternion(qx,qy,qz,qw);
+	    list.addDouble(qx);
+	    list.addDouble(qy);
+	    list.addDouble(qz);
+	    list.addDouble(qw);
+	}
+
         return temp;
     }
     
@@ -90,6 +108,7 @@ public:
 	    radius=0;
 	    object_pose = KDL::Frame::Identity();
 	    status="";
+	    affordances_number=0;
             return;
         }
         yarp::os::Bottle* list = temp->get(0).asList();
@@ -99,6 +118,7 @@ public:
 	    radius=0;
 	    object_pose = KDL::Frame::Identity();
 	    status="";
+	    affordances_number=0;
             return;
         }
         if (list->get(0).isNull())
@@ -107,6 +127,7 @@ public:
 	    radius=0;
 	    object_pose = KDL::Frame::Identity();
 	    status="";
+	    affordances_number=0;
             return;
         }
 
@@ -124,6 +145,26 @@ public:
 	object_pose.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
 
   status=list->get(9).asString();
+
+	affordances.clear();
+	affordances_number = list->get(10).asInt();
+	
+	int position = 10;
+	for(int i=0;i<affordances_number;i++)
+	{
+	    KDL::Frame temp_frame;
+	    temp_frame.p.x(list->get(position+1).asDouble());
+	    temp_frame.p.y(list->get(position+2).asDouble());
+	    temp_frame.p.z(list->get(position+3).asDouble());
+	    double qx,qy,qz,qw;
+	    qx = list->get(position+4).asDouble();
+	    qy = list->get(position+5).asDouble();
+	    qz = list->get(position+6).asDouble();
+	    qw = list->get(position+7).asDouble();
+	    temp_frame.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+	    affordances.push_back(temp_frame);
+	    position+=7;
+	}
 	return;
     }
   

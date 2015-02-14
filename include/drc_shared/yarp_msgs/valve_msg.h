@@ -5,6 +5,7 @@
 #include <yarp/os/Portable.h>
 #include <yarp/os/Bottle.h>
 #include <kdl/frames.hpp>
+#include <vector>
 
 class valve_msg
 {
@@ -25,7 +26,11 @@ public:
     std::string frame;
     
     KDL::Frame valve_data;
-    
+
+    int affordances_number;
+
+    std::vector<KDL::Frame> affordances;
+
     double radius;
 
     yarp::os::Bottle toBottle()
@@ -48,7 +53,22 @@ public:
 	    list.addDouble(ya);
 	    list.addDouble(radius);
 	}
-	
+
+	list.addInt(affordances_number);
+
+	for(int i=0;i<affordances_number;i++)
+	{
+	    list.addDouble(affordances.at(i).p.x());
+	    list.addDouble(affordances.at(i).p.y());
+	    list.addDouble(affordances.at(i).p.z());
+	    double qx,qy,qz,qw;
+	    affordances.at(i).M.GetQuaternion(qx,qy,qz,qw);
+	    list.addDouble(qx);
+	    list.addDouble(qy);
+	    list.addDouble(qz);
+	    list.addDouble(qw);
+	}
+
         return temp;
     }
 
@@ -85,6 +105,26 @@ public:
 	    ya = list->get(7).asDouble();
 	    valve_data.M = KDL::Rotation::RPY(ro,pi,ya);
 	    radius = list->get(8).asDouble();
+	}
+
+	affordances.clear();
+	affordances_number = list->get(9).asInt();
+
+	int position = 9;
+	for(int i=0;i<affordances_number;i++)
+	{
+	    KDL::Frame temp_frame;
+	    temp_frame.p.x(list->get(position+1).asDouble());
+	    temp_frame.p.y(list->get(position+2).asDouble());
+	    temp_frame.p.z(list->get(position+3).asDouble());
+	    double qx,qy,qz,qw;
+	    qx = list->get(position+4).asDouble();
+	    qy = list->get(position+5).asDouble();
+	    qz = list->get(position+6).asDouble();
+	    qw = list->get(position+7).asDouble();
+	    temp_frame.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+	    affordances.push_back(temp_frame);
+	    position+=7;
 	}
 
 	return;
