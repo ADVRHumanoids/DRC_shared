@@ -19,6 +19,7 @@ public:
 	valve_data.p.z(0.2);
 	valve_data.M = KDL::Rotation::Identity();
 	radius=0.13;
+	affordances_number = 0;
     }
   
     std::string command;
