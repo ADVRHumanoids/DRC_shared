@@ -17,6 +17,7 @@ public:
     std::vector<KDL::Frame> steps;
     KDL::Frame current_left_foot, current_right_foot;
     std::string starting_foot;
+	double turnAngle;
     
     yarp::os::Bottle toBottle()
     {
@@ -69,6 +70,10 @@ public:
             list.addDouble(y);
             list.addDouble(z);
             list.addDouble(w);
+        }
+    if (command=="turn")
+        {
+		  list.addDouble(turnAngle);
         }
         return temp;
     }
@@ -145,6 +150,11 @@ public:
             step.M = KDL::Rotation::Quaternion(x,y,z,w);
             steps.push_back(step);
         }
+	if (command=="turn")
+        {
+		  turnAngle = list->get(counter++).asDouble();
+        }
+        
 	return;
     }
   
