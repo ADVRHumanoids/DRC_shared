@@ -17,7 +17,14 @@ public:
     std::vector<KDL::Frame> steps;
     KDL::Frame current_left_foot, current_right_foot;
     std::string starting_foot;
+	
+	//Turning 
 	double turnAngle;
+	
+	//Stepping over obstacle 
+    double obstacleHeight, obstacleLength;
+    
+    
     
     yarp::os::Bottle toBottle()
     {
@@ -74,6 +81,11 @@ public:
     if (command=="turn")
         {
 		  list.addDouble(turnAngle);
+        }
+	if (command=="side_step_over")
+        {
+		  list.addDouble(obstacleHeight);
+		  list.addDouble(obstacleLength);
         }
         return temp;
     }
@@ -153,6 +165,11 @@ public:
 	if (command=="turn")
         {
 		  turnAngle = list->get(counter++).asDouble();
+        }
+    if (command=="side_step_over")
+        {
+		  obstacleHeight = list->get(counter++).asDouble();
+		  obstacleLength = list->get(counter++).asDouble();
         }
         
 	return;
