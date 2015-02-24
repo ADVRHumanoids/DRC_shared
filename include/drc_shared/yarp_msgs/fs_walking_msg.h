@@ -23,7 +23,7 @@ public:
 	
 	//Stepping over obstacle 
     double obstacleHeight, obstacleLength;
-    
+    double stepLengthX, stepLengthY;
     
     
     yarp::os::Bottle toBottle()
@@ -77,6 +77,9 @@ public:
             list.addDouble(y);
             list.addDouble(z);
             list.addDouble(w);
+			list.addDouble(stepLengthX);
+			list.addDouble(stepLengthY);
+			 
         }
     if (command=="turn")
         {
@@ -159,6 +162,8 @@ public:
             y = list->get(counter++).asDouble();
             z = list->get(counter++).asDouble();
             w = list->get(counter++).asDouble();
+			stepLengthX = list->get(counter++).asDouble();
+			stepLengthY = list->get(counter++).asDouble();			
             step.M = KDL::Rotation::Quaternion(x,y,z,w);
             steps.push_back(step);
         }
