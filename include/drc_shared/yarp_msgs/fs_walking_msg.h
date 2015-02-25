@@ -90,6 +90,12 @@ public:
 		  list.addDouble(obstacleHeight);
 		  list.addDouble(obstacleLength);
         }
+    if (command=="valve_turn_conf")
+        {
+		  list.addDouble(steps.front().p.x());
+		  list.addDouble(steps.front().p.y());
+		  list.addDouble(steps.front().p.z());
+        }   
         return temp;
     }
 
@@ -176,6 +182,15 @@ public:
 		  obstacleHeight = list->get(counter++).asDouble();
 		  obstacleLength = list->get(counter++).asDouble();
         }
+     if (command=="valve_turn_conf")
+        {
+		  
+		  KDL::Frame step;
+		  step.p.x(list->get(counter++).asDouble());
+		  step.p.y(list->get(counter++).asDouble());
+		  step.p.z(list->get(counter++).asDouble());
+		  steps.push_back(step);
+        }      
         
 	return;
     }
