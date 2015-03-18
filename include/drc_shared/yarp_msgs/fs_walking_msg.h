@@ -14,6 +14,8 @@ class fs_walking_msg
 public:
     std::string command;
 
+	double number=0;
+
     std::vector<KDL::Frame> steps;
     KDL::Frame current_left_foot, current_right_foot;
     std::string starting_foot;
@@ -59,7 +61,7 @@ public:
             list.addString(starting_foot.c_str());
 	}
 	if (command=="go_there")
-        {
+	{
             list.addDouble(steps.front().p.x());
             list.addDouble(steps.front().p.y());
             list.addDouble(steps.front().p.z());
@@ -69,7 +71,12 @@ public:
             list.addDouble(y);
             list.addDouble(z);
             list.addDouble(w);
-        }
+	}
+	if (command=="turn")
+	{
+		list.addDouble(number);
+	}
+
         return temp;
     }
 
@@ -132,19 +139,25 @@ public:
             starting_foot=list->get(counter++).asString();
 	}
 	if (command=="go_there")
-        {
-            KDL::Frame step;
-            step.p.x(list->get(counter++).asDouble());
-            step.p.y(list->get(counter++).asDouble());
-            step.p.z(list->get(counter++).asDouble());
-            double x,y,z,w;
-            x = list->get(counter++).asDouble();
-            y = list->get(counter++).asDouble();
-            z = list->get(counter++).asDouble();
-            w = list->get(counter++).asDouble();
-            step.M = KDL::Rotation::Quaternion(x,y,z,w);
-            steps.push_back(step);
-        }
+	{
+		KDL::Frame step;
+		step.p.x(list->get(counter++).asDouble());
+		step.p.y(list->get(counter++).asDouble());
+		step.p.z(list->get(counter++).asDouble());
+		double x,y,z,w;
+		x = list->get(counter++).asDouble();
+		y = list->get(counter++).asDouble();
+		z = list->get(counter++).asDouble();
+		w = list->get(counter++).asDouble();
+		step.M = KDL::Rotation::Quaternion(x,y,z,w);
+		steps.push_back(step);
+	}
+
+	if (command=="turn"||command=="start")
+	{
+		number=list->get(counter++).asDouble();
+	}
+
 	return;
     }
   
