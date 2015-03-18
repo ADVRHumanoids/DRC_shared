@@ -19,6 +19,7 @@ public:
 	valve_data.p.z(0.2);
 	valve_data.M = KDL::Rotation::Identity();
 	radius=0.13;
+	rotation=-1.4;
 	affordances_number = 0;
     }
   
@@ -33,6 +34,8 @@ public:
     std::vector<KDL::Frame> affordances;
 
     double radius;
+
+    double rotation;
 
     yarp::os::Bottle toBottle()
     {
@@ -53,21 +56,22 @@ public:
 	    list.addDouble(pi);
 	    list.addDouble(ya);
 	    list.addDouble(radius);
-	}
+	    list.addDouble(rotation);
 
-	list.addInt(affordances_number);
+	    list.addInt(affordances_number);
 
-	for(int i=0;i<affordances_number;i++)
-	{
-	    list.addDouble(affordances.at(i).p.x());
-	    list.addDouble(affordances.at(i).p.y());
-	    list.addDouble(affordances.at(i).p.z());
-	    double qx,qy,qz,qw;
-	    affordances.at(i).M.GetQuaternion(qx,qy,qz,qw);
-	    list.addDouble(qx);
-	    list.addDouble(qy);
-	    list.addDouble(qz);
-	    list.addDouble(qw);
+	    for(int i=0;i<affordances_number;i++)
+	    {
+		list.addDouble(affordances.at(i).p.x());
+		list.addDouble(affordances.at(i).p.y());
+		list.addDouble(affordances.at(i).p.z());
+		double qx,qy,qz,qw;
+		affordances.at(i).M.GetQuaternion(qx,qy,qz,qw);
+		list.addDouble(qx);
+		list.addDouble(qy);
+		list.addDouble(qz);
+		list.addDouble(qw);
+	    }
 	}
 
         return temp;
@@ -106,26 +110,27 @@ public:
 	    ya = list->get(7).asDouble();
 	    valve_data.M = KDL::Rotation::RPY(ro,pi,ya);
 	    radius = list->get(8).asDouble();
-	}
+	    rotation = list->get(9).asDouble();
 
-	affordances.clear();
-	affordances_number = list->get(9).asInt();
+	    affordances.clear();
+	    affordances_number = list->get(10).asInt();
 
-	int position = 9;
-	for(int i=0;i<affordances_number;i++)
-	{
-	    KDL::Frame temp_frame;
-	    temp_frame.p.x(list->get(position+1).asDouble());
-	    temp_frame.p.y(list->get(position+2).asDouble());
-	    temp_frame.p.z(list->get(position+3).asDouble());
-	    double qx,qy,qz,qw;
-	    qx = list->get(position+4).asDouble();
-	    qy = list->get(position+5).asDouble();
-	    qz = list->get(position+6).asDouble();
-	    qw = list->get(position+7).asDouble();
-	    temp_frame.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
-	    affordances.push_back(temp_frame);
-	    position+=7;
+	    int position = 10;
+	    for(int i=0;i<affordances_number;i++)
+	    {
+		KDL::Frame temp_frame;
+		temp_frame.p.x(list->get(position+1).asDouble());
+		temp_frame.p.y(list->get(position+2).asDouble());
+		temp_frame.p.z(list->get(position+3).asDouble());
+		double qx,qy,qz,qw;
+		qx = list->get(position+4).asDouble();
+		qy = list->get(position+5).asDouble();
+		qz = list->get(position+6).asDouble();
+		qw = list->get(position+7).asDouble();
+		temp_frame.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+		affordances.push_back(temp_frame);
+		position+=7;
+	    }
 	}
 
 	return;
