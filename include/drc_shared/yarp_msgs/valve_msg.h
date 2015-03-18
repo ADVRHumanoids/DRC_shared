@@ -77,63 +77,98 @@ public:
         return temp;
     }
 
-    void fromBottle(yarp::os::Bottle* temp)
+    bool fromBottle(const yarp::os::Bottle* temp)
     {
         if (temp->get(0).isNull())
         {
             command="";
-            return;
+            return false;
         }
         yarp::os::Bottle* list = temp->get(0).asList();
         if (list==NULL)
         {
             command="";
-            return;
+            return false;
         }
         if (list->get(0).isNull())
         {
             command="";
-            return;
+            return false;
         }
 
         command = list->get(0).asString();
 
-	if(command=="valvedatasent")
-	{
-	    frame = list->get(1).asString();
-	    valve_data.p.x(list->get(2).asDouble());
-	    valve_data.p.y(list->get(3).asDouble());
-	    valve_data.p.z(list->get(4).asDouble());
-	    double ro,pi,ya;
-	    ro = list->get(5).asDouble();
-	    pi = list->get(6).asDouble();
-	    ya = list->get(7).asDouble();
-	    valve_data.M = KDL::Rotation::RPY(ro,pi,ya);
-	    radius = list->get(8).asDouble();
-	    rotation = list->get(9).asDouble();
+        if(command=="valvedatasent")
+        {
+            frame = list->get(1).asString();
 
-	    affordances.clear();
-	    affordances_number = list->get(10).asInt();
+            if(list->size() < 9)
+                return false;
 
-	    int position = 10;
-	    for(int i=0;i<affordances_number;i++)
-	    {
-		KDL::Frame temp_frame;
-		temp_frame.p.x(list->get(position+1).asDouble());
-		temp_frame.p.y(list->get(position+2).asDouble());
-		temp_frame.p.z(list->get(position+3).asDouble());
-		double qx,qy,qz,qw;
-		qx = list->get(position+4).asDouble();
-		qy = list->get(position+5).asDouble();
-		qz = list->get(position+6).asDouble();
-		qw = list->get(position+7).asDouble();
-		temp_frame.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
-		affordances.push_back(temp_frame);
-		position+=7;
-	    }
-	}
+            /* checking valve position */
+            if(!(list->get(2).isDouble() &&
+                 list->get(3).isDouble() &&
+                 list->get(4).isDouble()))
+                return false;
 
-	return;
+            valve_data.p.x(list->get(2).asDouble());
+            valve_data.p.y(list->get(3).asDouble());
+            valve_data.p.z(list->get(4).asDouble());
+
+            /* checking valve orientation */
+            if(!(list->get(5).isDouble() &&
+                 list->get(6).isDouble() &&
+                 list->get(7).isDouble()))
+                return false;
+
+            double ro,pi,ya;
+            ro = list->get(5).asDouble();
+            pi = list->get(6).asDouble();
+            ya = list->get(7).asDouble();
+            valve_data.M = KDL::Rotation::RPY(ro,pi,ya);
+
+            /* checking radius */
+            if(!(list->get(8).isDouble()))
+                return false;
+
+            radius = list->get(8).asDouble();
+
+            /* OPTIONAL PARAMETERS */
+
+            if(list->size() > 9)
+            {
+                if(list->get(9).isDouble())
+                    rotation = list->get(9).asDouble();
+            }
+
+
+            affordances.clear();
+            affordances_number = 0;
+
+            if(list->size() > 10 && list->get(10).isInt())
+                affordances_number = list->get(10).asInt();
+
+            int position = 10;
+            for(int i = 0; i < affordances_number; i++)
+            {
+                KDL::Frame temp_frame;
+                temp_frame.p.x(list->get(position+1).asDouble());
+                temp_frame.p.y(list->get(position+2).asDouble());
+                temp_frame.p.z(list->get(position+3).asDouble());
+                double qx,qy,qz,qw;
+                qx = list->get(position+4).asDouble();
+                qy = list->get(position+5).asDouble();
+                qz = list->get(position+6).asDouble();
+                qw = list->get(position+7).asDouble();
+                temp_frame.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+                affordances.push_back(temp_frame);
+                position+=7;
+            }
+
+            return true;
+        }
+
+        return false;
     }
   
 };
