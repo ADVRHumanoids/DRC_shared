@@ -129,6 +129,7 @@ public:
 
 	if(command=="steps")
 	{
+            steps.clear();
             int steps_size=list->get(counter++).asInt();
             for (int i=0;i<steps_size;i++)
             {
