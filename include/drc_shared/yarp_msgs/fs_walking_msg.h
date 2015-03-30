@@ -199,6 +199,7 @@ public:
 	if (command=="Turn")
 	{
 		number=list->get(counter++).asDouble();
+		std::cout<<"Turn:"<<number<<std::endl;
 	}   
         
 	return;
