@@ -20,9 +20,10 @@ public:
 	drill_data.M = KDL::Rotation::Identity();
     }
   
-    KDL::Frame drill_data;
+    KDL::Frame drill_data, wall_data;
     std::string command;  
     std::string frame;
+    double radius;
 
     yarp::os::Bottle toBottle()
     {
@@ -42,6 +43,20 @@ public:
 	    list.addDouble(ro);
 	    list.addDouble(pi);
 	    list.addDouble(ya);
+	}
+	
+	if(command=="walldatasent")
+	{
+	    list.addString(frame);
+	    list.addDouble(drill_data.p.x());
+	    list.addDouble(drill_data.p.y());
+	    list.addDouble(drill_data.p.z());
+	    double ro,pi,ya;
+	    drill_data.M.GetRPY(ro,pi,ya);
+	    list.addDouble(ro);
+	    list.addDouble(pi);
+	    list.addDouble(ya);
+	    list.addDouble(radius);
 	}
 	
         return temp;
@@ -80,7 +95,20 @@ public:
 	    ya = list->get(7).asDouble();
 	    drill_data.M = KDL::Rotation::RPY(ro,pi,ya);
 	}
-
+	
+	if(command=="walldatasent")
+	{
+	    frame = list->get(1).asString();
+	    drill_data.p.x(list->get(2).asDouble());
+	    drill_data.p.y(list->get(3).asDouble());
+	    drill_data.p.z(list->get(4).asDouble());
+	    double ro,pi,ya;
+	    ro = list->get(5).asDouble();
+	    pi = list->get(6).asDouble();
+	    ya = list->get(7).asDouble();
+	    drill_data.M = KDL::Rotation::RPY(ro,pi,ya);
+	    radius = list->get(8).asDouble();
+	}
 	return;
     }
   

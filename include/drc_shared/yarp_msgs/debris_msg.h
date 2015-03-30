@@ -17,6 +17,7 @@ public:
 	debris_data = KDL::Frame::Identity();
 	left_hand = KDL::Frame::Identity();
 	right_hand = KDL::Frame::Identity();
+	length = 0.0;
     }
   
     std::string command;
@@ -28,6 +29,8 @@ public:
     KDL::Frame left_hand;
     
     KDL::Frame right_hand;
+    
+    double length;
 
     yarp::os::Bottle toBottle()
     {
@@ -48,6 +51,7 @@ public:
 	    list.addDouble(qy);
 	    list.addDouble(qz);
 	    list.addDouble(qw);
+	    list.addDouble(length);
 	}
 	
 	if(command=="hands_data")
@@ -109,6 +113,7 @@ public:
 	    qz = list->get(7).asDouble();
 	    qw = list->get(8).asDouble();
 	    debris_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+	    length = list->get(9).asDouble();
 	}
 	
 	if(command=="hands_data")
