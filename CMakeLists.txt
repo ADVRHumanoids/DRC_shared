@@ -63,6 +63,8 @@ install(TARGETS drc_shared
         
 set_property(GLOBAL APPEND PROPERTY ${VARS_PREFIX}_TARGETS drc_shared)
 
+add_executable(test_mirko src/examples/draw_state_machine.cpp)
+target_link_libraries(test_mirko drc_shared)
 
 include(InstallBasicPackageFiles)
 
