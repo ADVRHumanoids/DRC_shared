@@ -7,7 +7,6 @@
 #include <iostream>
 #include <typeinfo>
 #include <cxxabi.h>
-#include <../../../../Ascari/gml2lgf/arc.h>
 
 struct stat;
 namespace walkman{
