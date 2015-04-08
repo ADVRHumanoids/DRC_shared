@@ -8,6 +8,12 @@
 #include <yarp/os/Bottle.h>
 #include <kdl/frames.hpp>
 
+class step_with_name
+{
+public:
+  KDL::Frame pose;
+  std::string step_name;
+};
 
 class fs_walking_msg
 {
@@ -16,7 +22,7 @@ public:
 
 	double number=0;
 
-    std::vector<KDL::Frame> steps;
+    std::vector<step_with_name> steps;
     KDL::Frame current_left_foot, current_right_foot;
     std::string starting_foot;
 	
@@ -37,13 +43,14 @@ public:
 	if(command=="steps")
 	{
             list.addInt(steps.size());
-            for (KDL::Frame step:steps)
+            for (step_with_name step:steps)
             {
-                list.addDouble(step.p.x());
-                list.addDouble(step.p.y());
-                list.addDouble(step.p.z());
+	        list.addString(step.step_name);
+                list.addDouble(step.pose.p.x());
+                list.addDouble(step.pose.p.y());
+                list.addDouble(step.pose.p.z());
                 double x,y,z,w;
-                step.M.GetQuaternion(x,y,z,w);
+                step.pose.M.GetQuaternion(x,y,z,w);
                 list.addDouble(x);
                 list.addDouble(y);
                 list.addDouble(z);
@@ -70,11 +77,11 @@ public:
 	}
 	if (command=="go_there")
         {
-            list.addDouble(steps.front().p.x());
-            list.addDouble(steps.front().p.y());
-            list.addDouble(steps.front().p.z());
+            list.addDouble(steps.front().pose.p.x());
+            list.addDouble(steps.front().pose.p.y());
+            list.addDouble(steps.front().pose.p.z());
             double x,y,z,w;
-            steps.front().M.GetQuaternion(x,y,z,w);
+            steps.front().pose.M.GetQuaternion(x,y,z,w);
             list.addDouble(x);
             list.addDouble(y);
             list.addDouble(z);
@@ -98,9 +105,9 @@ public:
         }
     if (command=="valve_turn_conf")
         {
-		  list.addDouble(steps.front().p.x());
-		  list.addDouble(steps.front().p.y());
-		  list.addDouble(steps.front().p.z());
+		  list.addDouble(steps.front().pose.p.x());
+		  list.addDouble(steps.front().pose.p.y());
+		  list.addDouble(steps.front().pose.p.z());
         }   
         return temp;
     }
@@ -133,16 +140,17 @@ public:
             int steps_size=list->get(counter++).asInt();
             for (int i=0;i<steps_size;i++)
             {
-                KDL::Frame step;
-                step.p.x(list->get(counter++).asDouble());
-                step.p.y(list->get(counter++).asDouble());
-                step.p.z(list->get(counter++).asDouble());
+                step_with_name step;
+		step.step_name = list->get(counter++).asString();
+                step.pose.p.x(list->get(counter++).asDouble());
+                step.pose.p.y(list->get(counter++).asDouble());
+                step.pose.p.z(list->get(counter++).asDouble());
                 double x,y,z,w;
                 x = list->get(counter++).asDouble();
                 y = list->get(counter++).asDouble();
                 z = list->get(counter++).asDouble();
                 w = list->get(counter++).asDouble();
-                step.M = KDL::Rotation::Quaternion(x,y,z,w);
+                step.pose.M = KDL::Rotation::Quaternion(x,y,z,w);
                 steps.push_back(step);
             }
             current_left_foot.p.x(list->get(counter++).asDouble());
@@ -166,16 +174,16 @@ public:
 	}
 	if (command=="go_there")
         {
-            KDL::Frame step;
-            step.p.x(list->get(counter++).asDouble());
-            step.p.y(list->get(counter++).asDouble());
-            step.p.z(list->get(counter++).asDouble());
+            step_with_name step;
+            step.pose.p.x(list->get(counter++).asDouble());
+            step.pose.p.y(list->get(counter++).asDouble());
+            step.pose.p.z(list->get(counter++).asDouble());
             double x,y,z,w;
             x = list->get(counter++).asDouble();
             y = list->get(counter++).asDouble();
             z = list->get(counter++).asDouble();
             w = list->get(counter++).asDouble();
-            step.M = KDL::Rotation::Quaternion(x,y,z,w);
+            step.pose.M = KDL::Rotation::Quaternion(x,y,z,w);
             steps.push_back(step);
         }
 	if (command=="turn")
@@ -190,10 +198,10 @@ public:
      if (command=="valve_turn_conf")
         {
 		  
-		  KDL::Frame step;
-		  step.p.x(list->get(counter++).asDouble());
-		  step.p.y(list->get(counter++).asDouble());
-		  step.p.z(list->get(counter++).asDouble());
+		  step_with_name step;
+		  step.pose.p.x(list->get(counter++).asDouble());
+		  step.pose.p.y(list->get(counter++).asDouble());
+		  step.pose.p.z(list->get(counter++).asDouble());
 		  steps.push_back(step);
         }   
 
