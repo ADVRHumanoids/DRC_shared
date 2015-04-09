@@ -184,6 +184,8 @@ public:
             z = list->get(counter++).asDouble();
             w = list->get(counter++).asDouble();
             step.pose.M = KDL::Rotation::Quaternion(x,y,z,w);
+			stepLengthX = list->get(counter++).asDouble();;
+			stepLengthY = list->get(counter++).asDouble();;
             steps.push_back(step);
         }
 	if (command=="turn")
