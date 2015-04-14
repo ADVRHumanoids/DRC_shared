@@ -125,6 +125,10 @@ namespace fs_perception{
 struct point{
     double x,y,z;
 };
+struct step{
+    point position;
+    std::string name;
+};
 }
 class fs_perception_msg
 {
@@ -135,7 +139,8 @@ public:
 
     
     std::string command;
-    std::vector<fs_perception::point> seeds;
+    std::vector<fs_perception::step> seeds;
+    std::string frame;
     yarp::os::Bottle toBottle()
     {
         yarp::os::Bottle temp;
@@ -144,12 +149,14 @@ public:
         
         if (command=="seeds")
         {
+	    list.addString(frame);
             list.addInt(seeds.size());
             for (auto seed:seeds)
             {
-                list.addDouble(seed.x);
-                list.addDouble(seed.y);
-                list.addDouble(seed.z);
+		list.addString(seed.name);
+                list.addDouble(seed.position.x);
+                list.addDouble(seed.position.y);
+                list.addDouble(seed.position.z);
             }
         }
         return temp;
@@ -179,12 +186,14 @@ public:
         if (command=="seeds")
         {
             int counter=1;
+	    frame=list->get(counter++).asString();
             seeds.resize(list->get(counter++).asInt());
             for (int i=0;i<seeds.size();i++)
             {
-                seeds[i].x=list->get(counter++).asDouble();
-                seeds[i].y=list->get(counter++).asDouble();
-                seeds[i].z=list->get(counter++).asDouble();
+	        seeds[i].name=list->get(counter++).asString();
+                seeds[i].position.x=list->get(counter++).asDouble();
+                seeds[i].position.y=list->get(counter++).asDouble();
+                seeds[i].position.z=list->get(counter++).asDouble();
             }
         }
 	return;
