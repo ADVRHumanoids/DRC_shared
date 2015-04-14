@@ -15,9 +15,13 @@ public:
   {
       pose = KDL::Frame::Identity();
       step_name = "";
+	  type = "normal";
+	  height = 0.0;
   }
   KDL::Frame pose;
   std::string step_name;
+  string type; 			//"normal" - regular step, "square" - rectangular step for stepping over obstacles or steps 
+  double height;		//Foot clearance 
 };
 
 class fs_walking_msg
@@ -52,7 +56,7 @@ public:
             list.addInt(steps.size());
             for (step_with_name step:steps)
             {
-	        list.addString(step.step_name);
+                list.addString(step.step_name);
                 list.addDouble(step.pose.p.x());
                 list.addDouble(step.pose.p.y());
                 list.addDouble(step.pose.p.z());
@@ -62,6 +66,8 @@ public:
                 list.addDouble(y);
                 list.addDouble(z);
                 list.addDouble(w);
+                list.addString(step.type);
+                list.addDouble(step.height);
             }
             list.addDouble(current_left_foot.p.x());
             list.addDouble(current_left_foot.p.y());
@@ -149,7 +155,7 @@ public:
             for (int i=0;i<steps_size;i++)
             {
                 step_with_name step;
-		step.step_name = list->get(counter++).asString();
+                step.step_name = list->get(counter++).asString();
                 step.pose.p.x(list->get(counter++).asDouble());
                 step.pose.p.y(list->get(counter++).asDouble());
                 step.pose.p.z(list->get(counter++).asDouble());
@@ -159,6 +165,8 @@ public:
                 z = list->get(counter++).asDouble();
                 w = list->get(counter++).asDouble();
                 step.pose.M = KDL::Rotation::Quaternion(x,y,z,w);
+                step.type = list->get(counter++).asString();
+                step.height = list->get(counter++).asDouble();
                 steps.push_back(step);
             }
             current_left_foot.p.x(list->get(counter++).asDouble());
