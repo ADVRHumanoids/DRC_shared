@@ -11,6 +11,11 @@
 class step_with_name
 {
 public:
+  step_with_name()
+  {
+      pose = KDL::Frame::Identity();
+      step_name = "";
+  }
   KDL::Frame pose;
   std::string step_name;
 };
