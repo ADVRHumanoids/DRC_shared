@@ -31,6 +31,7 @@ public:
     KDL::Frame current_left_foot, current_right_foot;
     std::string starting_foot;
 	
+    std::string frame;
 	//Turning 
 	double turnAngle;
 	
@@ -47,6 +48,7 @@ public:
 	list.addString(command);
 	if(command=="steps")
 	{
+	    list.addString(frame);
             list.addInt(steps.size());
             for (step_with_name step:steps)
             {
@@ -142,6 +144,7 @@ public:
 	if(command=="steps")
 	{
             steps.clear();
+	    frame=list->get(counter++).asString();
             int steps_size=list->get(counter++).asInt();
             for (int i=0;i<steps_size;i++)
             {
