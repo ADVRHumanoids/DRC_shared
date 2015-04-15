@@ -20,7 +20,7 @@ public:
   }
   KDL::Frame pose;
   std::string step_name;
-  string type; 			//"normal" - regular step, "square" - rectangular step for stepping over obstacles or steps 
+  std::string type; 			//"normal" - regular step, "square" - rectangular step for stepping over obstacles or steps 
   double height;		//Foot clearance 
 };
 
