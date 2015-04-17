@@ -35,7 +35,6 @@ public:
         {
             encoder_to_int a;
             a.enc=round(encoders[i]*50.0);
-            std::cout<<a.enc<<std::endl;
             buffer[size]=a.chars[0];
             size++;
             buffer[size]=a.chars[1];
@@ -53,7 +52,6 @@ public:
         {
             return;
         }
-        std::cout<<"-------------"<<std::endl;
 //         int size = temp->get(getter).asInt(); getter++;
 //         assert(size*2==temp->get(getter).asBlobLength());
         int size = temp->get(getter).asBlobLength();
@@ -72,7 +70,6 @@ public:
             count++;
             enc.chars[1]=buffer[count];
             count++;
-            std::cout<<enc.enc<<std::endl;
             encoders.push_back(enc.enc/50.0);
         }
 
