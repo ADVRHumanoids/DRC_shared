@@ -6,9 +6,7 @@
 #include <yarp/os/Bottle.h>
 #include <kdl/frames.hpp>
 
-namespace yarp
-{
-namespace KDL
+namespace yarp_KDL
 {
     struct float_frame
     {
@@ -29,7 +27,12 @@ namespace KDL
         buffer.frame.px=(float)input.p.x();
         buffer.frame.py=(float)input.p.y();
         buffer.frame.pz=(float)input.p.z();
-        input.M.GetQuaternion(buffer.frame.rx,buffer.frame.ry,buffer.frame.rz,buffer.frame.rw);
+        double rx,ry,rz,rw;
+        input.M.GetQuaternion(rx,ry,rz,rw);
+        buffer.frame.rx=(float)rx;
+        buffer.frame.ry=(float)ry;
+        buffer.frame.rz=(float)rz;
+        buffer.frame.rw=(float)rw;
         yarp::os::Value a(buffer.chars,28);
         return a;
     }
@@ -40,7 +43,7 @@ namespace KDL
         if (size!=28) 
         {
             std::cout<<"AAAAAAAAAAAAAAAAAAAAAAA bad blob (kdl_frame_msg)!!"<<std::endl;
-            return;
+            return KDL::Frame();
         }
         frame_as_char buffer;
         const char* source = input.asBlob();
@@ -49,14 +52,20 @@ namespace KDL
             buffer.chars[i]=source[i];
         }
         KDL::Frame output;
-        output.p.x()=buffer.frame.px;
-        output.p.y()=buffer.frame.py;
-        output.p.z()=buffer.frame.pz;
-        output.M=KDL::Rotation::Quaternion(buffer.frame.rx,buffer.frame.ry,buffer.frame.rz,buffer.frame.rw);
+        output.p.x(buffer.frame.px);
+        output.p.y(buffer.frame.py);
+        output.p.z(buffer.frame.pz);
+        double rx,ry,rz,rw;
+        rx=buffer.frame.rx;
+        ry=buffer.frame.ry;
+        rz=buffer.frame.rz;
+        rw=buffer.frame.rw;
+        output.M=KDL::Rotation::Quaternion(rx,ry,rz,rw);
+        
         return output;
     }
 }
-}
+
 
 class kdl_frame_msg
 {
@@ -70,7 +79,7 @@ public:
     yarp::os::Bottle toBottle()
     {
         yarp::os::Bottle temp;
-        temp.add(yarp::KDL::getBlob(frame));
+        temp.add(yarp_KDL::getBlob(frame));
         return temp;
     }
 
@@ -82,7 +91,7 @@ public:
             return;
         }
         if (temp->get(getter).asBlobLength()==0) return;
-        frame = yarp::KDL::fromBlob(temp->get(getter));
+        frame = yarp_KDL::fromBlob(temp->get(getter));
         return;
     }
 };
