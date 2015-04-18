@@ -56,6 +56,7 @@ public:
 //         assert(size*2==temp->get(getter).asBlobLength());
         int size = temp->get(getter).asBlobLength();
         if (size==0) return;
+        encoders.resize(size/2);
         char buffer[300];
         const char* source = temp->get(getter).asBlob();getter++;
         for (int i=0;i<size;i++)
@@ -70,7 +71,7 @@ public:
             count++;
             enc.chars[1]=buffer[count];
             count++;
-            encoders.push_back(enc.enc/50.0);
+            encoders[i/2]=enc.enc/50.0;
         }
 
         return;
