@@ -46,6 +46,10 @@ public:
 // 	    list.addDouble(ya);
 	    double qx,qy,qz,qw;
 	    drive_data.M.GetQuaternion(qx,qy,qz,qw);
+	    list.addDouble(qx);
+	    list.addDouble(qy);
+	    list.addDouble(qz);
+	    list.addDouble(qw);
 	    list.addDouble(radius);
 	}
 	
