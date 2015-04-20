@@ -33,26 +33,23 @@ public:
 
 	list.addString(command);
 
-	if(command=="drivedatasent")
+	if(command=="steeringwheeldatasent")
 	{
 	    list.addString(frame);
 	    list.addDouble(drive_data.p.x());
 	    list.addDouble(drive_data.p.y());
 	    list.addDouble(drive_data.p.z());
-	    double ro,pi,ya;
-	    drive_data.M.GetRPY(ro,pi,ya);
-	    list.addDouble(ro);
-	    list.addDouble(pi);
-	    list.addDouble(ya);
+// 	    double ro,pi,ya;
+// 	    drive_data.M.GetRPY(ro,pi,ya);
+// 	    list.addDouble(ro);
+// 	    list.addDouble(pi);
+// 	    list.addDouble(ya);
+	    double qx,qy,qz,qw;
+	    drive_data.M.GetQuaternion(qx,qy,qz,qw);
 	    list.addDouble(radius);
 	}
 	
-	if(command=="turn_left")
-	{
-	    list.addDouble(angle);
-	}
-	
-	if(command=="turn_right")
+	if(command=="turn_left" || command=="turn_right")
 	{
 	    list.addDouble(angle);
 	}
@@ -81,29 +78,31 @@ public:
 
         command = list->get(0).asString();
 
-	if(command=="drivedatasent")
+	if(command=="steeringwheeldatasent")
 	{
 	    frame = list->get(1).asString();
 	    drive_data.p.x(list->get(2).asDouble());
 	    drive_data.p.y(list->get(3).asDouble());
 	    drive_data.p.z(list->get(4).asDouble());
-	    double ro,pi,ya;
-	    ro = list->get(5).asDouble();
-	    pi = list->get(6).asDouble();
-	    ya = list->get(7).asDouble();
-	    drive_data.M = KDL::Rotation::RPY(ro,pi,ya);
-	    radius = list->get(8).asDouble();
+// 	    double ro,pi,ya;
+// 	    ro = list->get(5).asDouble();
+// 	    pi = list->get(6).asDouble();
+// 	    ya = list->get(7).asDouble();
+// 	    drive_data.M = KDL::Rotation::RPY(ro,pi,ya);
+	    double qx,qy,qz,qw;
+	    qx = list->get(5).asDouble();
+	    qy = list->get(6).asDouble();
+	    qz = list->get(7).asDouble();
+	    qw = list->get(8).asDouble(); 
+	    drive_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+	    radius = list->get(9).asDouble();
 	}
 	
-	if(command=="turn_left")
+	if(command=="turn_left" || command=="turn_right")
 	{
 	    angle = list->get(1).asDouble();
 	}
 	
-	if(command=="turn_right")
-	{
-	    angle = list->get(1).asDouble();
-	}
 	return;
     }
   
