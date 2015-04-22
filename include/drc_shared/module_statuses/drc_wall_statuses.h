@@ -1,5 +1,5 @@
-#ifndef DRC_DOOR_STATUSES_H
-#define DRC_DOOR_STATUSES_H
+#ifndef DRC_WALL_STATUSES_H
+#define DRC_WALL_STATUSES_H
 
 #include <map>
 #include <vector>
@@ -54,4 +54,4 @@ public:
 }
 }
 
-#endif //DRC_DOOR_STATUSES_H
+#endif //DRC_WALL_STATUSES_H
