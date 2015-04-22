@@ -4,10 +4,6 @@
 #include <map>
 #include <vector>
 
-#define HOMING_STATUS "homing"
-#define STAND_STATUS "stand"
-#define HOMING_GUARD_STATUS "homing_guard"
-
 namespace walkman
 {
 namespace drc
