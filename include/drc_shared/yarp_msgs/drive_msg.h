@@ -5,6 +5,7 @@
 #include <yarp/os/Portable.h>
 #include <yarp/os/Bottle.h>
 #include <kdl/frames.hpp>
+#include "drc_shared/yarp_msgs/KDL_frame_msg.h"
 
 class drive_msg
 {
@@ -36,20 +37,7 @@ public:
 	if(command=="steeringwheeldatasent")
 	{
 	    list.addString(frame);
-	    list.addDouble(drive_data.p.x());
-	    list.addDouble(drive_data.p.y());
-	    list.addDouble(drive_data.p.z());
-// 	    double ro,pi,ya;
-// 	    drive_data.M.GetRPY(ro,pi,ya);
-// 	    list.addDouble(ro);
-// 	    list.addDouble(pi);
-// 	    list.addDouble(ya);
-	    double qx,qy,qz,qw;
-	    drive_data.M.GetQuaternion(qx,qy,qz,qw);
-	    list.addDouble(qx);
-	    list.addDouble(qy);
-	    list.addDouble(qz);
-	    list.addDouble(qw);
+	    list.add(yarp_KDL::getBlob(drive_data));
 	    list.addDouble(radius);
 	}
 	
@@ -82,24 +70,27 @@ public:
 
         command = list->get(0).asString();
 
+	int index=1;
 	if(command=="steeringwheeldatasent")
 	{
-	    frame = list->get(1).asString();
-	    drive_data.p.x(list->get(2).asDouble());
-	    drive_data.p.y(list->get(3).asDouble());
-	    drive_data.p.z(list->get(4).asDouble());
-// 	    double ro,pi,ya;
-// 	    ro = list->get(5).asDouble();
-// 	    pi = list->get(6).asDouble();
-// 	    ya = list->get(7).asDouble();
-// 	    drive_data.M = KDL::Rotation::RPY(ro,pi,ya);
-	    double qx,qy,qz,qw;
-	    qx = list->get(5).asDouble();
-	    qy = list->get(6).asDouble();
-	    qz = list->get(7).asDouble();
-	    qw = list->get(8).asDouble(); 
-	    drive_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
-	    radius = list->get(9).asDouble();
+	    frame = list->get(index++).asString();
+	    if(list->get(index).asBlobLength()!=0)
+	    {
+		drive_data = yarp_KDL::fromBlob(list->get(index++));
+	    }
+	    else
+	    {  
+		drive_data.p.x(list->get(index++).asDouble());
+		drive_data.p.y(list->get(index++).asDouble());
+		drive_data.p.z(list->get(index++).asDouble());
+		double qx,qy,qz,qw;
+		qx = list->get(index++).asDouble();
+		qy = list->get(index++).asDouble();
+		qz = list->get(index++).asDouble();
+		qw = list->get(index++).asDouble();
+		drive_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+	    }
+	    radius = list->get(index++).asDouble();
 	}
 	
 	if(command=="turn_left" || command=="turn_right")

@@ -5,6 +5,7 @@
 #include <yarp/os/Portable.h>
 #include <yarp/os/Bottle.h>
 #include <kdl/frames.hpp>
+#include "drc_shared/yarp_msgs/KDL_frame_msg.h"
 
 class door_msg
 {
@@ -40,14 +41,7 @@ public:
 	if(command=="doordatasent")
 	{
 	    list.addString(frame);
-	    list.addDouble(door_data.p.x());
-	    list.addDouble(door_data.p.y());
-	    list.addDouble(door_data.p.z());
-	    double ro,pi,ya;
-	    door_data.M.GetRPY(ro,pi,ya);
-	    list.addDouble(ro);
-	    list.addDouble(pi);
-	    list.addDouble(ya);
+	    list.add(yarp_KDL::getBlob(door_data));
 	    list.addDouble(handle_length);
 	    list.addDouble(door_width);
 	}
@@ -76,19 +70,28 @@ public:
 
         command = list->get(0).asString();
 
+	int index=1;
 	if(command=="doordatasent")
 	{
-	    frame = list->get(1).asString();
-	    door_data.p.x(list->get(2).asDouble());
-	    door_data.p.y(list->get(3).asDouble());
-	    door_data.p.z(list->get(4).asDouble());
-	    double ro,pi,ya;
-	    ro = list->get(5).asDouble();
-	    pi = list->get(6).asDouble();
-	    ya = list->get(7).asDouble();
-	    door_data.M = KDL::Rotation::RPY(ro,pi,ya);
-	    handle_length = list->get(8).asDouble();
-	    door_width = list->get(9).asDouble();
+	    frame = list->get(index++).asString();
+	    if(list->get(index).asBlobLength()!=0)
+	    {
+		door_data = yarp_KDL::fromBlob(list->get(index++));
+	    }
+	    else
+	    {  
+		door_data.p.x(list->get(index++).asDouble());
+		door_data.p.y(list->get(index++).asDouble());
+		door_data.p.z(list->get(index++).asDouble());
+		double qx,qy,qz,qw;
+		qx = list->get(index++).asDouble();
+		qy = list->get(index++).asDouble();
+		qz = list->get(index++).asDouble();
+		qw = list->get(index++).asDouble();
+		door_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+	    }
+	    handle_length = list->get(index++).asDouble();
+	    door_width = list->get(index++).asDouble();
 	}
 
 	return;

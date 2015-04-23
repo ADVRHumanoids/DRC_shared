@@ -5,6 +5,7 @@
 #include <yarp/os/Portable.h>
 #include <yarp/os/Bottle.h>
 #include <kdl/frames.hpp>
+#include "drc_shared/yarp_msgs/KDL_frame_msg.h"
 
 class drill_msg
 {
@@ -83,32 +84,52 @@ public:
 
         command = list->get(0).asString();
 
+	int index=1;
 	if(command=="drilldatasent")
 	{
-	    frame = list->get(1).asString();
-	    drill_data.p.x(list->get(2).asDouble());
-	    drill_data.p.y(list->get(3).asDouble());
-	    drill_data.p.z(list->get(4).asDouble());
-	    double ro,pi,ya;
-	    ro = list->get(5).asDouble();
-	    pi = list->get(6).asDouble();
-	    ya = list->get(7).asDouble();
-	    drill_data.M = KDL::Rotation::RPY(ro,pi,ya);
+	    frame = list->get(index++).asString();
+	    if(list->get(index).asBlobLength()!=0)
+	    {
+		drill_data = yarp_KDL::fromBlob(list->get(index++));
+	    }
+	    else
+	    {  
+		drill_data.p.x(list->get(index++).asDouble());
+		drill_data.p.y(list->get(index++).asDouble());
+		drill_data.p.z(list->get(index++).asDouble());
+		double qx,qy,qz,qw;
+		qx = list->get(index++).asDouble();
+		qy = list->get(index++).asDouble();
+		qz = list->get(index++).asDouble();
+		qw = list->get(index++).asDouble();
+		drill_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+	    }
 	}
-	
+
+	index=1;
 	if(command=="walldatasent")
 	{
-	    frame = list->get(1).asString();
-	    drill_data.p.x(list->get(2).asDouble());
-	    drill_data.p.y(list->get(3).asDouble());
-	    drill_data.p.z(list->get(4).asDouble());
-	    double ro,pi,ya;
-	    ro = list->get(5).asDouble();
-	    pi = list->get(6).asDouble();
-	    ya = list->get(7).asDouble();
-	    drill_data.M = KDL::Rotation::RPY(ro,pi,ya);
-	    radius = list->get(8).asDouble();
+	    frame = list->get(index++).asString();
+	    if(list->get(index).asBlobLength()!=0)
+	    {
+		drill_data = yarp_KDL::fromBlob(list->get(index++));
+	    }
+	    else
+	    {  
+		drill_data.p.x(list->get(index++).asDouble());
+		drill_data.p.y(list->get(index++).asDouble());
+		drill_data.p.z(list->get(index++).asDouble());
+		double qx,qy,qz,qw;
+		qx = list->get(index++).asDouble();
+		qy = list->get(index++).asDouble();
+		qz = list->get(index++).asDouble();
+		qw = list->get(index++).asDouble();
+		drill_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+	    }
+	    radius = list->get(index++).asDouble();
 	}
+	
+	
 	return;
     }
   
