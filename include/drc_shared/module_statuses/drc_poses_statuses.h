@@ -19,6 +19,7 @@ public:
 	
 	states.push_back("ready");
 	states.push_back("homing");
+	states.push_back("recover");
 	states.push_back("stand");
 	states.push_back("homing_guard");
 	states.push_back("homing_guard_left");
