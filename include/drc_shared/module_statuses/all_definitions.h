@@ -28,8 +28,8 @@ public:
 	module_status_to_code["drc_wall"] = wall_states.status_to_code;
 
 	walking::status_definitions walk_states;
-	module_code_to_status["walking"] = wall_states.code_to_status;
-	module_status_to_code["walking"] = wall_states.status_to_code;
+	module_code_to_status["walking"] = walk_states.code_to_status;
+	module_status_to_code["walking"] = walk_states.status_to_code;
     }
     
     std::map<std::string, std::map<std::string,std::string>> module_code_to_status;
