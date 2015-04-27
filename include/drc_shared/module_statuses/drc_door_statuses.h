@@ -33,6 +33,8 @@ public:
 	states.push_back("opened_door");
 	states.push_back("supporting hand");
 	states.push_back("supported hand");
+	states.push_back("ungrasping");
+	states.push_back("ungrasped");
 	states.push_back("leaving handle");
 	states.push_back("left handle");
 	states.push_back("safe_exiting");
