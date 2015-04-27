@@ -4,6 +4,7 @@
 #include "drc_shared/module_statuses/drc_poses_statuses.h"
 #include "drc_shared/module_statuses/drc_door_statuses.h"
 #include "drc_shared/module_statuses/drc_wall_statuses.h"
+#include "drc_shared/module_statuses/walking_statuses.h"
 
 namespace walkman
 {
@@ -25,6 +26,10 @@ public:
 	wall::status_definitions wall_states;
 	module_code_to_status["drc_wall"] = wall_states.code_to_status;
 	module_status_to_code["drc_wall"] = wall_states.status_to_code;
+
+	walking::status_definitions walk_states;
+	module_code_to_status["walking"] = wall_states.code_to_status;
+	module_status_to_code["walking"] = wall_states.status_to_code;
     }
     
     std::map<std::string, std::map<std::string,std::string>> module_code_to_status;
