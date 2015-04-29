@@ -29,15 +29,12 @@ class fs_walking_msg
 public:
     std::string command;
 
-	double number=0;
+    double number=0;
 
-<<<<<<< HEAD
     double FootPlace[7] = { 0 };
 
-    std::vector<KDL::Frame> steps;
-=======
     std::vector<step_with_name> steps;
->>>>>>> 7bd9b518c4766566f74ba8905c546e52d050d452
+
     KDL::Frame current_left_foot, current_right_foot;
     std::string starting_foot;
 	
