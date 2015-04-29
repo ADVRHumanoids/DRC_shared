@@ -8,6 +8,21 @@
 #include <yarp/os/Bottle.h>
 #include <kdl/frames.hpp>
 
+class step_with_name
+{
+public:
+  step_with_name()
+  {
+      pose = KDL::Frame::Identity();
+      step_name = "";
+	  type = "normal";
+	  height = 0.0;
+  }
+  KDL::Frame pose;
+  std::string step_name;
+  std::string type; 			//"normal" - regular step, "square" - rectangular step for stepping over obstacles or steps 
+  double height;		//Foot clearance 
+};
 
 class fs_walking_msg
 {
@@ -16,12 +31,17 @@ public:
 
 	double number=0;
 
+<<<<<<< HEAD
     double FootPlace[7] = { 0 };
 
     std::vector<KDL::Frame> steps;
+=======
+    std::vector<step_with_name> steps;
+>>>>>>> 7bd9b518c4766566f74ba8905c546e52d050d452
     KDL::Frame current_left_foot, current_right_foot;
     std::string starting_foot;
 	
+    std::string frame;
 	//Turning 
 	double turnAngle;
 	
@@ -38,18 +58,22 @@ public:
 	list.addString(command);
 	if(command=="steps")
 	{
+	    list.addString(frame);
             list.addInt(steps.size());
-            for (KDL::Frame step:steps)
+            for (step_with_name step:steps)
             {
-                list.addDouble(step.p.x());
-                list.addDouble(step.p.y());
-                list.addDouble(step.p.z());
+                list.addString(step.step_name);
+                list.addDouble(step.pose.p.x());
+                list.addDouble(step.pose.p.y());
+                list.addDouble(step.pose.p.z());
                 double x,y,z,w;
-                step.M.GetQuaternion(x,y,z,w);
+                step.pose.M.GetQuaternion(x,y,z,w);
                 list.addDouble(x);
                 list.addDouble(y);
                 list.addDouble(z);
                 list.addDouble(w);
+                list.addString(step.type);
+                list.addDouble(step.height);
             }
             list.addDouble(current_left_foot.p.x());
             list.addDouble(current_left_foot.p.y());
@@ -72,11 +96,11 @@ public:
 	}
 	if (command=="go_there")
         {
-            list.addDouble(steps.front().p.x());
-            list.addDouble(steps.front().p.y());
-            list.addDouble(steps.front().p.z());
+            list.addDouble(steps.front().pose.p.x());
+            list.addDouble(steps.front().pose.p.y());
+            list.addDouble(steps.front().pose.p.z());
             double x,y,z,w;
-            steps.front().M.GetQuaternion(x,y,z,w);
+            steps.front().pose.M.GetQuaternion(x,y,z,w);
             list.addDouble(x);
             list.addDouble(y);
             list.addDouble(z);
@@ -100,9 +124,9 @@ public:
         }
     if (command=="valve_turn_conf")
         {
-		  list.addDouble(steps.front().p.x());
-		  list.addDouble(steps.front().p.y());
-		  list.addDouble(steps.front().p.z());
+		  list.addDouble(steps.front().pose.p.x());
+		  list.addDouble(steps.front().pose.p.y());
+		  list.addDouble(steps.front().pose.p.z());
         }   
         return temp;
     }
@@ -131,19 +155,24 @@ public:
 
 	if(command=="steps")
 	{
+            steps.clear();
+	    frame=list->get(counter++).asString();
             int steps_size=list->get(counter++).asInt();
             for (int i=0;i<steps_size;i++)
             {
-                KDL::Frame step;
-                step.p.x(list->get(counter++).asDouble());
-                step.p.y(list->get(counter++).asDouble());
-                step.p.z(list->get(counter++).asDouble());
+                step_with_name step;
+                step.step_name = list->get(counter++).asString();
+                step.pose.p.x(list->get(counter++).asDouble());
+                step.pose.p.y(list->get(counter++).asDouble());
+                step.pose.p.z(list->get(counter++).asDouble());
                 double x,y,z,w;
                 x = list->get(counter++).asDouble();
                 y = list->get(counter++).asDouble();
                 z = list->get(counter++).asDouble();
                 w = list->get(counter++).asDouble();
-                step.M = KDL::Rotation::Quaternion(x,y,z,w);
+                step.pose.M = KDL::Rotation::Quaternion(x,y,z,w);
+                step.type = list->get(counter++).asString();
+                step.height = list->get(counter++).asDouble();
                 steps.push_back(step);
             }
             current_left_foot.p.x(list->get(counter++).asDouble());
@@ -167,16 +196,18 @@ public:
 	}
 	if (command=="go_there")
         {
-            KDL::Frame step;
-            step.p.x(list->get(counter++).asDouble());
-            step.p.y(list->get(counter++).asDouble());
-            step.p.z(list->get(counter++).asDouble());
+            step_with_name step;
+            step.pose.p.x(list->get(counter++).asDouble());
+            step.pose.p.y(list->get(counter++).asDouble());
+            step.pose.p.z(list->get(counter++).asDouble());
             double x,y,z,w;
             x = list->get(counter++).asDouble();
             y = list->get(counter++).asDouble();
             z = list->get(counter++).asDouble();
             w = list->get(counter++).asDouble();
-            step.M = KDL::Rotation::Quaternion(x,y,z,w);
+            step.pose.M = KDL::Rotation::Quaternion(x,y,z,w);
+			stepLengthX = list->get(counter++).asDouble();;
+			stepLengthY = list->get(counter++).asDouble();;
             steps.push_back(step);
         }
 	if (command=="turn")
@@ -191,16 +222,17 @@ public:
      if (command=="valve_turn_conf")
         {
 		  
-		  KDL::Frame step;
-		  step.p.x(list->get(counter++).asDouble());
-		  step.p.y(list->get(counter++).asDouble());
-		  step.p.z(list->get(counter++).asDouble());
+		  step_with_name step;
+		  step.pose.p.x(list->get(counter++).asDouble());
+		  step.pose.p.y(list->get(counter++).asDouble());
+		  step.pose.p.z(list->get(counter++).asDouble());
 		  steps.push_back(step);
         }   
 
 	if (command=="Turn")
 	{
 		number=list->get(counter++).asDouble();
+		std::cout<<"Turn:"<<number<<std::endl;
 	}   
 
     if (command=="foothold")

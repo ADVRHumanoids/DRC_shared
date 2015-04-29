@@ -1,5 +1,5 @@
-#ifndef DOOR_MSG
-#define DOOR_MSG
+#ifndef DRIVE_MSG
+#define DRIVE_MSG
 
 #include <string>
 #include <yarp/os/Portable.h>
@@ -7,29 +7,25 @@
 #include <kdl/frames.hpp>
 #include "drc_shared/yarp_msgs/KDL_frame_msg.h"
 
-class door_msg
+class drive_msg
 {
 public:
-    door_msg()
+    drive_msg()
     {
 	// TODO ADD RIGHT CUSTOM DATA
 	command="";
 	frame="";
-	door_data.p.x(0.0);
-	door_data.p.y(0.0);
-	door_data.p.z(0.0);
-	door_data.M = KDL::Rotation::Identity();
-	handle_length=0.1;
-	door_width=0.5;
+	drive_data.p.x(0.0);
+	drive_data.p.y(0.0);
+	drive_data.p.z(0.0);
+	drive_data.M = KDL::Rotation::Identity();
     }
   
-    std::string command;
-    
+    KDL::Frame drive_data;
+    std::string command;  
     std::string frame;
-    
-    KDL::Frame door_data;
-    
-    double handle_length, door_width;
+    double radius;
+    double angle;
 
     yarp::os::Bottle toBottle()
     {
@@ -38,12 +34,16 @@ public:
 
 	list.addString(command);
 
-	if(command=="doordatasent")
+	if(command=="steeringwheeldatasent")
 	{
 	    list.addString(frame);
-	    list.add(yarp_KDL::getBlob(door_data));
-	    list.addDouble(handle_length);
-	    list.addDouble(door_width);
+	    list.add(yarp_KDL::getBlob(drive_data));
+	    list.addDouble(radius);
+	}
+	
+	if(command=="turn_left" || command=="turn_right")
+	{
+	    list.addDouble(angle);
 	}
 	
         return temp;
@@ -71,32 +71,36 @@ public:
         command = list->get(0).asString();
 
 	int index=1;
-	if(command=="doordatasent")
+	if(command=="steeringwheeldatasent")
 	{
 	    frame = list->get(index++).asString();
 	    if(list->get(index).asBlobLength()!=0)
 	    {
-		door_data = yarp_KDL::fromBlob(list->get(index++));
+		drive_data = yarp_KDL::fromBlob(list->get(index++));
 	    }
 	    else
 	    {  
-		door_data.p.x(list->get(index++).asDouble());
-		door_data.p.y(list->get(index++).asDouble());
-		door_data.p.z(list->get(index++).asDouble());
+		drive_data.p.x(list->get(index++).asDouble());
+		drive_data.p.y(list->get(index++).asDouble());
+		drive_data.p.z(list->get(index++).asDouble());
 		double qx,qy,qz,qw;
 		qx = list->get(index++).asDouble();
 		qy = list->get(index++).asDouble();
 		qz = list->get(index++).asDouble();
 		qw = list->get(index++).asDouble();
-		door_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+		drive_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
 	    }
-	    handle_length = list->get(index++).asDouble();
-	    door_width = list->get(index++).asDouble();
+	    radius = list->get(index++).asDouble();
 	}
-
+	
+	if(command=="turn_left" || command=="turn_right")
+	{
+	    angle = list->get(1).asDouble();
+	}
+	
 	return;
     }
   
 };
 
-#endif // DOOR_MSG
+#endif // DRIVE_MSG
