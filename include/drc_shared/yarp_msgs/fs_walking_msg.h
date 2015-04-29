@@ -16,6 +16,8 @@ public:
 
 	double number=0;
 
+    double FootPlace[7] = { 0 };
+
     std::vector<KDL::Frame> steps;
     KDL::Frame current_left_foot, current_right_foot;
     std::string starting_foot;
@@ -200,6 +202,17 @@ public:
 	{
 		number=list->get(counter++).asDouble();
 	}   
+
+    if (command=="foothold")
+    {
+        FootPlace[0]=list->get(counter++).asDouble();
+        FootPlace[1]=list->get(counter++).asDouble();
+        FootPlace[2]=list->get(counter++).asDouble();
+        FootPlace[3]=list->get(counter++).asDouble();
+        FootPlace[4]=list->get(counter++).asDouble();
+        FootPlace[5]=list->get(counter++).asDouble();
+        FootPlace[6]=list->get(counter++).asDouble();
+    }
         
 	return;
     }
