@@ -45,7 +45,7 @@ public:
 	//Stepping over obstacle 
     double obstacleHeight, obstacleLength;
     double stepLengthX, stepLengthY;
-    string trajType; //Type of trajectory for go there command. Possible options "linear", "spline"
+    std::string trajType; //Type of trajectory for go there command. Possible options "linear", "spline"
     
     yarp::os::Bottle toBottle()
     {
