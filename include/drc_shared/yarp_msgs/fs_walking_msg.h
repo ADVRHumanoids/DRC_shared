@@ -45,7 +45,7 @@ public:
 	//Stepping over obstacle 
     double obstacleHeight, obstacleLength;
     double stepLengthX, stepLengthY;
-    
+    string trajType; //Type of trajectory for go there command. Possible options "linear", "spline"
     
     yarp::os::Bottle toBottle()
     {
@@ -102,8 +102,9 @@ public:
             list.addDouble(y);
             list.addDouble(z);
             list.addDouble(w);
-			list.addDouble(stepLengthX);
-			list.addDouble(stepLengthY);
+            list.addDouble(stepLengthX);
+            list.addDouble(stepLengthY);
+            list.addString(trajType);
 			 
         }
 	if (command=="Turn")
@@ -203,8 +204,9 @@ public:
             z = list->get(counter++).asDouble();
             w = list->get(counter++).asDouble();
             step.pose.M = KDL::Rotation::Quaternion(x,y,z,w);
-			stepLengthX = list->get(counter++).asDouble();;
-			stepLengthY = list->get(counter++).asDouble();;
+            stepLengthX = list->get(counter++).asDouble();
+            stepLengthY = list->get(counter++).asDouble();
+            trajType = list->get(counter++).asString();
             steps.push_back(step);
         }
 	if (command=="turn")
