@@ -39,6 +39,8 @@ public:
 	states.push_back("left handle");
         states.push_back("more opening");
         states.push_back("more opened");
+        states.push_back("homing");
+        states.push_back("homed");
 	states.push_back("safe exiting");
 	states.push_back("safe exited");
 
