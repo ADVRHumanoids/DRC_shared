@@ -97,12 +97,11 @@ public:
 		drill_data.p.x(list->get(index++).asDouble());
 		drill_data.p.y(list->get(index++).asDouble());
 		drill_data.p.z(list->get(index++).asDouble());
-		double qx,qy,qz,qw;
-		qx = list->get(index++).asDouble();
-		qy = list->get(index++).asDouble();
-		qz = list->get(index++).asDouble();
-		qw = list->get(index++).asDouble();
-		drill_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+		double ro,pi,ya;
+		ro = list->get(index++).asDouble();
+		pi = list->get(index++).asDouble();
+		ya = list->get(index++).asDouble();
+		drill_data.M = KDL::Rotation::RPY(ro,pi,ya);
 	    }
 	}
 
@@ -119,12 +118,11 @@ public:
 		drill_data.p.x(list->get(index++).asDouble());
 		drill_data.p.y(list->get(index++).asDouble());
 		drill_data.p.z(list->get(index++).asDouble());
-		double qx,qy,qz,qw;
-		qx = list->get(index++).asDouble();
-		qy = list->get(index++).asDouble();
-		qz = list->get(index++).asDouble();
-		qw = list->get(index++).asDouble();
-		drill_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+		double ro,pi,ya;
+		ro = list->get(index++).asDouble();
+		pi = list->get(index++).asDouble();
+		ya = list->get(index++).asDouble();
+		drill_data.M = KDL::Rotation::RPY(ro,pi,ya);
 	    }
 	    radius = list->get(index++).asDouble();
 	}
