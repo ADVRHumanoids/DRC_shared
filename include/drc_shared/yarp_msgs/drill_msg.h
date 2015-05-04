@@ -36,27 +36,13 @@ public:
 	if(command=="drilldatasent")
 	{
 	    list.addString(frame);
-	    list.addDouble(drill_data.p.x());
-	    list.addDouble(drill_data.p.y());
-	    list.addDouble(drill_data.p.z());
-	    double ro,pi,ya;
-	    drill_data.M.GetRPY(ro,pi,ya);
-	    list.addDouble(ro);
-	    list.addDouble(pi);
-	    list.addDouble(ya);
+	    list.add(yarp_KDL::getBlob(drill_data));
 	}
 	
 	if(command=="walldatasent")
 	{
 	    list.addString(frame);
-	    list.addDouble(drill_data.p.x());
-	    list.addDouble(drill_data.p.y());
-	    list.addDouble(drill_data.p.z());
-	    double ro,pi,ya;
-	    drill_data.M.GetRPY(ro,pi,ya);
-	    list.addDouble(ro);
-	    list.addDouble(pi);
-	    list.addDouble(ya);
+	    list.add(yarp_KDL::getBlob(drill_data));
 	    list.addDouble(radius);
 	}
 	
