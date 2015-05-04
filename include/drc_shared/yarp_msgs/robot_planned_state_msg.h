@@ -7,6 +7,8 @@
 
 #include <yarp/os/Bottle.h>
 
+#include <eigen3/Eigen/Eigen>
+
 /*
  * MESSAGE STRUCTURE
  * 
@@ -21,6 +23,8 @@ class robot_planned_state_msg
 public:
     
     std::map<std::string,double> joints;
+    std::string base_link;
+    Eigen::Affine3d FixedFrame_BaseLink;
         
     yarp::os::Bottle toBottle()
     {
@@ -35,7 +39,12 @@ public:
 	    list.addString(it->first);
 	    list.addDouble(it->second);
 	}
-	
+
+	list.addString(base_link);
+	list.addDouble(FixedFrame_BaseLink.data()[0]);
+	list.addDouble(FixedFrame_BaseLink.data()[1]);
+	list.addDouble(FixedFrame_BaseLink.data()[2]);
+
         return temp;
     }
     
@@ -54,6 +63,11 @@ public:
 	    	    
 	    j+=2;
 	}
+
+	base_link = list->get(j).asString();
+	FixedFrame_BaseLink.data()[0] = list->get(j+1).asDouble();
+	FixedFrame_BaseLink.data()[1] = list->get(j+2).asDouble();
+	FixedFrame_BaseLink.data()[2] = list->get(j+3).asDouble();
 
 	return;
     }
