@@ -79,6 +79,7 @@ public:
 
         uint8_t n_joints = buffer[0];
         encoders.resize(n_joints);
+        torques.resize(n_joints);
         int count = 0;
         for (uint8_t i=0; i<n_joints; i++)
         {
