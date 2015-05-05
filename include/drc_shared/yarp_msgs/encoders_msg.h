@@ -77,10 +77,12 @@ public:
             buffer[i]=source[i];
         }
 
-        uint8_t n_joints = buffer[0];
+        int count = 0;
+        uint8_t n_joints = buffer[count];
+        count++;
         encoders.resize(n_joints);
         torques.resize(n_joints);
-        int count = 0;
+
         for (uint8_t i=0; i<n_joints; i++)
         {
             encoder_to_int enc;
