@@ -27,6 +27,11 @@ public:
 class fs_walking_msg
 {
 public:
+    fs_walking_msg(){
+      comCtrlGainsX.resize(4,0);
+      comCtrlGainsY.resize(4,0);
+    };
+    ~fs_walking_msg(){}
     std::string command;
 
     double number=0;
@@ -46,6 +51,10 @@ public:
     double obstacleHeight, obstacleLength;
     double stepLengthX, stepLengthY;
     std::string trajType; //Type of trajectory for go there command. Possible options "linear", "spline"
+    
+    //Used for gain tuning. To be used only by experienced person. 
+    std::vector<double> comCtrlGainsX;
+    std::vector<double> comCtrlGainsY;
     
     yarp::os::Bottle toBottle()
     {
@@ -126,6 +135,16 @@ public:
 		  list.addDouble(steps.front().pose.p.y());
 		  list.addDouble(steps.front().pose.p.z());
         }   
+    if (command=="com_ctrl_gains")
+        {
+          for (int i=0; i<4; i++) { 
+              list.addDouble(comCtrlGainsX[i]);
+          }
+          for (int i=0; i<4; i++) { 
+              list.addDouble(comCtrlGainsY[i]);
+          }
+         
+        }           
         return temp;
     }
 
@@ -226,6 +245,16 @@ public:
 		  step.pose.p.y(list->get(counter++).asDouble());
 		  step.pose.p.z(list->get(counter++).asDouble());
 		  steps.push_back(step);
+      if (command=="com_ctrl_gains")
+        {
+          for (int i=0; i<4; i++) { 
+              comCtrlGainsX[i] = list->get(counter++).asDouble();
+          }
+          for (int i=0; i<4; i++) { 
+              comCtrlGainsY[i] = list->get(counter++).asDouble();
+          }
+         
+        }       
         }   
 
 	if (command=="Turn")
