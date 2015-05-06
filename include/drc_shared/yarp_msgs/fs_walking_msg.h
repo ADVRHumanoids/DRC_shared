@@ -244,7 +244,8 @@ public:
 		  step.pose.p.x(list->get(counter++).asDouble());
 		  step.pose.p.y(list->get(counter++).asDouble());
 		  step.pose.p.z(list->get(counter++).asDouble());
-		  steps.push_back(step);
+		  steps.push_back(step);       
+        }   
       if (command=="com_ctrl_gains")
         {
           for (int i=0; i<4; i++) { 
@@ -254,8 +255,7 @@ public:
               comCtrlGainsY[i] = list->get(counter++).asDouble();
           }
          
-        }       
-        }   
+        }        
 
 	if (command=="Turn")
 	{
