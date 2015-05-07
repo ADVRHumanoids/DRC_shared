@@ -55,6 +55,8 @@ public:
     //Used for gain tuning. To be used only by experienced person. 
     std::vector<double> comCtrlGainsX;
     std::vector<double> comCtrlGainsY;
+    std::vector<double> zmpCtrl_zmpGain;
+    std::vector<double> zmpCtrl_pendGain;
     
     yarp::os::Bottle toBottle()
     {
@@ -144,7 +146,18 @@ public:
               list.addDouble(comCtrlGainsY[i]);
           }
          
-        }           
+        }
+     if (command=="zmp_ctrl_gains")
+        {
+          for (int i=0; i<2; i++) { 
+              list.addDouble(zmpCtrl_zmpGain[i]);
+          }
+          for (int i=0; i<2; i++) { 
+              list.addDouble(zmpCtrl_pendGain[i]);
+          }
+         
+        }   
+         
         return temp;
     }
 
@@ -255,7 +268,16 @@ public:
               comCtrlGainsY[i] = list->get(counter++).asDouble();
           }
          
-        }        
+        }
+      if (command=="zmp_ctrl_gains")
+        {
+          for (int i=0; i<2; i++) { 
+              zmpCtrl_zmpGain[i] = list->get(counter++).asDouble();
+          }
+          for (int i=0; i<2; i++) { 
+              zmpCtrl_pendGain[i] = list->get(counter++).asDouble();
+          }
+        }  
 
 	if (command=="Turn")
 	{
