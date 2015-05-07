@@ -5,6 +5,11 @@
 #include "drc_shared/module_statuses/drc_door_statuses.h"
 #include "drc_shared/module_statuses/drc_wall_statuses.h"
 #include "drc_shared/module_statuses/walking_statuses.h"
+#include "drc_shared/module_statuses/drc_drive_statuses.h"
+#include "drc_shared/module_statuses/gaze_control_statuses.h"
+#include "drc_shared/module_statuses/drc_valve_statuses.h"
+#include "drc_shared/module_statuses/drc_debris_statuses.h"
+#include "drc_shared/module_statuses/simple_homing_statuses.h"
 
 namespace walkman
 {
@@ -30,6 +35,26 @@ public:
 	walking::status_definitions walk_states;
 	module_code_to_status["walking"] = walk_states.code_to_status;
 	module_status_to_code["walking"] = walk_states.status_to_code;
+
+	drive::status_definitions drive_states;
+	module_code_to_status["drc_drive"] = drive_states.code_to_status;
+	module_status_to_code["drc_drive"] = drive_states.status_to_code;
+
+	gaze::status_definitions gaze_states;
+	module_code_to_status["gaze_control"] = gaze_states.code_to_status;
+	module_status_to_code["gaze_control"] = gaze_states.status_to_code;
+
+	valve::status_definitions valve_states;
+	module_code_to_status["drc_valve"] = valve_states.code_to_status;
+	module_status_to_code["drc_valve"] = valve_states.status_to_code;
+
+	debris::status_definitions debris_states;
+	module_code_to_status["drc_debris"] = debris_states.code_to_status;
+	module_status_to_code["drc_debris"] = debris_states.status_to_code;
+
+	homing::status_definitions homing_states;
+	module_code_to_status["simple_homing"] = homing_states.code_to_status;
+	module_status_to_code["simple_homing"] = homing_states.status_to_code; 
     }
     
     std::map<std::string, std::map<std::string,std::string>> module_code_to_status;
