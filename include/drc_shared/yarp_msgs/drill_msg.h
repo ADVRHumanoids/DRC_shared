@@ -39,6 +39,12 @@ public:
 	    list.add(yarp_KDL::getBlob(drill_data));
 	}
 	
+	if(command=="buttondatasent")
+        {
+            list.addString(frame);
+            list.add(yarp_KDL::getBlob(drill_data));
+        }
+	
 	if(command=="walldatasent")
 	{
 	    list.addString(frame);
@@ -92,6 +98,28 @@ public:
 	    }
 	}
 
+	index=1;
+        if(command=="buttondatasent")
+        {
+            frame = list->get(index++).asString();
+            if(list->get(index).asBlobLength()!=0)
+            {
+                drill_data = yarp_KDL::fromBlob(list->get(index++));
+            }
+            else
+            {  
+                drill_data.p.x(list->get(index++).asDouble());
+                drill_data.p.y(list->get(index++).asDouble());
+                drill_data.p.z(list->get(index++).asDouble());
+                double qx,qy,qz,qw;
+                qx = list->get(index++).asDouble();
+                qy = list->get(index++).asDouble();
+                qz = list->get(index++).asDouble();
+                qw = list->get(index++).asDouble();
+                drill_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+            }
+        }
+        
 	index=1;
 	if(command=="walldatasent")
 	{
