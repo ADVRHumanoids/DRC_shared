@@ -25,6 +25,7 @@ public:
     std::string command;  
     std::string frame;
     double radius;
+    double angle;
 
     yarp::os::Bottle toBottle()
     {
@@ -33,6 +34,10 @@ public:
 
 	list.addString(command);
 
+	if(command=="rotate")
+	{
+	  list.addDouble(angle);
+	}
 	if(command=="drilldatasent")
 	{
 	    list.addString(frame);
@@ -143,6 +148,12 @@ public:
 	    radius = list->get(index++).asDouble();
 	}
 	
+	
+	index=1;
+	if(command=="rotate")
+	{
+	    angle = list->get(1).asDouble();
+	}
 	
 	return;
     }
