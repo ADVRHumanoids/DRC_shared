@@ -10,6 +10,7 @@
 #include "drc_shared/module_statuses/drc_valve_statuses.h"
 #include "drc_shared/module_statuses/drc_debris_statuses.h"
 #include "drc_shared/module_statuses/simple_homing_statuses.h"
+#include "drc_shared/module_statuses/drc_plug_statuses.h"
 
 namespace walkman
 {
@@ -55,6 +56,11 @@ public:
 	homing::status_definitions homing_states;
 	module_code_to_status["simple_homing"] = homing_states.code_to_status;
 	module_status_to_code["simple_homing"] = homing_states.status_to_code; 
+	
+	plug::status_definitions plug_states;
+	module_code_to_status["drc_plug"] = plug_states.code_to_status;
+	module_status_to_code["drc_plug"] = plug_states.status_to_code; 
+	
     }
     
     std::map<std::string, std::map<std::string,std::string>> module_code_to_status;
