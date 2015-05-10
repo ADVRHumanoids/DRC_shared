@@ -26,6 +26,7 @@ public:
     std::string frame;
     double radius;
     double angle;
+    double gas_time;
 
     yarp::os::Bottle toBottle()
     {
@@ -45,6 +46,11 @@ public:
 	{
 	    list.addDouble(angle);
 	}
+	
+	if(command=="accelerate")
+        {
+            list.addDouble(gas_time);
+        }
 	
         return temp;
     }
@@ -97,6 +103,11 @@ public:
 	{
 	    angle = list->get(1).asDouble();
 	}
+	
+	if(command=="accelerate")
+        {
+            gas_time = list->get(1).asDouble();
+        }
 	
 	return;
     }
