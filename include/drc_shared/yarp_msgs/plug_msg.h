@@ -24,7 +24,6 @@ public:
     KDL::Frame valve_data, button_data;
     std::string command;  
     std::string frame;
-    double radius;
     double angle;
     
     yarp::os::Bottle toBottle()
@@ -49,7 +48,6 @@ public:
         {
             list.addString(frame);
             list.add(yarp_KDL::getBlob(button_data));
-	    list.addDouble(radius);
         }
 	
         return temp;
@@ -118,7 +116,6 @@ public:
                 qw = list->get(index++).asDouble();
                 button_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
             }
-	    radius = list->get(index++).asDouble();
 	}
 
 	index=1;
