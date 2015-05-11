@@ -27,6 +27,7 @@ public:
     double radius;
     double angle;
     double gas_time;
+    double full_circle_time;
 
     yarp::os::Bottle toBottle()
     {
@@ -45,6 +46,7 @@ public:
 	if(command=="turn_left" || command=="turn_right")
 	{
 	    list.addDouble(angle);
+	    list.addDouble(full_circle_time);
 	}
 	
 	if(command=="accelerate")
@@ -102,6 +104,7 @@ public:
 	if(command=="turn_left" || command=="turn_right")
 	{
 	    angle = list->get(1).asDouble();
+	    full_circle_time = list->get(2).asDouble();
 	}
 	
 	if(command=="accelerate")
