@@ -18,6 +18,7 @@ public:
         std::vector<std::string> states;
 
 	states.push_back("running");
+	states.push_back("pause");
 
 	char code='a';
 	for(auto state:states)
