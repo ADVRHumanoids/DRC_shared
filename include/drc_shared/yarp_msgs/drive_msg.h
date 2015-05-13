@@ -24,7 +24,6 @@ public:
     KDL::Frame drive_data;
     std::string command;  
     std::string frame;
-    double radius;
     double angle;
     double gas_time;
     double full_circle_time;
@@ -40,7 +39,6 @@ public:
 	{
 	    list.addString(frame);
 	    list.add(yarp_KDL::getBlob(drive_data));
-	    list.addDouble(radius);
 	}
 	
 	if(command=="turn_left" || command=="turn_right")
@@ -98,7 +96,6 @@ public:
 		qw = list->get(index++).asDouble();
 		drive_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
 	    }
-	    radius = list->get(index++).asDouble();
 	}
 	
 	if(command=="turn_left" || command=="turn_right")
