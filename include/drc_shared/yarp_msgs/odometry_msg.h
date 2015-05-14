@@ -1,5 +1,5 @@
-#ifndef DRIVE_MSG
-#define DRIVE_MSG
+#ifndef ODOMETRY_MSG
+#define ODOMETRY_MSG
 
 #include <string>
 #include <yarp/os/Portable.h>
@@ -65,4 +65,4 @@ public:
     
 };
 
-#endif // DRIVE_MSG
+#endif // ODOMETRY_MSG
