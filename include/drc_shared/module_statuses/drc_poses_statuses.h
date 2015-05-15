@@ -18,6 +18,7 @@ public:
         std::vector<std::string> states;
 	
 	states.push_back("ready");
+    states.push_back("pre_homing");
 	states.push_back("homing");
 	states.push_back("recover");
 	states.push_back("stand");
