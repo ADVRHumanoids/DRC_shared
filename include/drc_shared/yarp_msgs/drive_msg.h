@@ -27,6 +27,7 @@ public:
     double angle;
     double gas_time;
     double full_circle_time;
+    double foot_rotation;
 
     yarp::os::Bottle toBottle()
     {
@@ -39,6 +40,7 @@ public:
 	{
 	    list.addString(frame);
 	    list.add(yarp_KDL::getBlob(drive_data));
+	    list.addDouble(foot_rotation);
 	}
 	
 	if(command=="turn_left" || command=="turn_right")
@@ -96,6 +98,7 @@ public:
 		qw = list->get(index++).asDouble();
 		drive_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
 	    }
+	    foot_rotation = list->get(index++).asDouble();
 	}
 	
 	if(command=="turn_left" || command=="turn_right")
