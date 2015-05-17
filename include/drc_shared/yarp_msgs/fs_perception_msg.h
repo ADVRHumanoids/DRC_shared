@@ -141,6 +141,7 @@ public:
     std::string command;
     std::vector<fs_perception::step> seeds;
     std::string frame;
+    std::string topic;
     yarp::os::Bottle toBottle()
     {
         yarp::os::Bottle temp;
@@ -158,6 +159,7 @@ public:
                 list.addDouble(seed.position.y);
                 list.addDouble(seed.position.z);
             }
+            list.addString(topic);
         }
         return temp;
     }
@@ -195,6 +197,7 @@ public:
                 seeds[i].position.y=list->get(counter++).asDouble();
                 seeds[i].position.z=list->get(counter++).asDouble();
             }
+            topic = list->get(counter++).asString();
         }
 	return;
     }
