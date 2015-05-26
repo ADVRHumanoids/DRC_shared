@@ -198,7 +198,7 @@ namespace walkman{
                 for (auto edge:arcs)
                     ss<<"edge ["<<std::endl<<"source "<<edge.second.first<<std::endl<<"target "<< edge.second.second <<std::endl<<"]"<<std::endl;
                 ss<<"]"<<std::endl;
-                std::cout<<ss.str()<<std::endl;
+//                 std::cout<<ss.str()<<std::endl;
                 std::ofstream myfile;
                 myfile.open (filename);
                 myfile << ss.str();
