@@ -34,7 +34,7 @@ public:
     }
     
     void addBool(bool in) {
-      buffer[m_size] = (in == true ? 1 : 0)s;
+      buffer[m_size] = (in == true ? 1 : 0);
       m_size++;
     }
     
@@ -70,7 +70,7 @@ public:
         addDouble(in(2));
     }
     
-    void addVector2d(Eigen::Vecto2d in) {
+    void addVector2d(Eigen::Vector2d in) {
         addDouble(in(0));
         addDouble(in(1));
     }
@@ -107,12 +107,12 @@ public:
         if (bottle->get(getter).isNull())
         {
             isReady = false;
-            return;
+            return isReady;
         }
         m_size = bottle->get(getter).asBlobLength();
         if (m_size == 0) {
             isReady = false;
-            return;
+            return isReady;
         }
 
         
@@ -151,7 +151,7 @@ public:
     }
     
     int getInt() {
-        int_fast32_t a;
+        intToChar a;
         a.chars[0] = m_buffer[m_index];
         m_index++;
         a.chars[1] = m_buffer[m_index];
@@ -197,15 +197,15 @@ public:
     
     
     //Task space references
-    VectorXd pelvis;
-    VectorXd lFoot;
-    VectorXd rFoot;
+    Eigen::VectorXd pelvis;
+    Eigen::VectorXd lFoot;
+    Eigen::VectorXd rFoot;
     
     //Estimates and references
-    Vector2d zmp_ref;
-    Vector2d zmp_meas;
-    Vector2d com_ref;
-    Vector2d com_meas;
+    Eigen::Vector2d zmp_ref;
+    Eigen::Vector2d zmp_meas;
+    Eigen::Vector2d com_ref;
+    Eigen::Vector2d com_meas;
     
     //ZMP shifts
     Eigen::Vector3d     stepZmpShiftL;
@@ -244,12 +244,12 @@ public:
           // ------------------------ task space references -------------------
         
           case 0: {//Last task space references
-              serialize.addVector3d(pelvis.segmetn(0,0));
-              serialize.addVector3d(pelvis.segmetn(3,0));
-              serialize.addVector3d(lFoot.segmetn(0,0));
-              serialize.addVector3d(lFoot.segmetn(3,0));
-              serialize.addVector3d(rFoot.segmetn(0,0));
-              serialize.addVector3d(rFoot.segmetn(3,0));
+              serialize.addVector3d(pelvis.segment(0,0));
+              serialize.addVector3d(pelvis.segment(3,0));
+              serialize.addVector3d(lFoot.segment(0,0));
+              serialize.addVector3d(lFoot.segment(3,0));
+              serialize.addVector3d(rFoot.segment(0,0));
+              serialize.addVector3d(rFoot.segment(3,0));
           
           } break;
           
@@ -376,12 +376,12 @@ public:
           // ------------------------ task space references -------------------
           
           case 0: {//Last task space references
-              pelvis.segmetn(0,0) = deserialize.getVector3d();
-              pelvis.segmetn(3,0) = deserialize.getVector3d();
-              lFoot.segmetn(0,0)  = deserialize.getVector3d();
-              lFoot.segmetn(3,0)  = deserialize.getVector3d();
-              rFoot.segmetn(0,0)  = deserialize.getVector3d();
-              rFoot.segmetn(3,0)  = deserialize.getVector3d();
+              pelvis.segment(0,0) = deserialize.getVector3d();
+              pelvis.segment(3,0) = deserialize.getVector3d();
+              lFoot.segment(0,0)  = deserialize.getVector3d();
+              lFoot.segment(3,0)  = deserialize.getVector3d();
+              rFoot.segment(0,0)  = deserialize.getVector3d();
+              rFoot.segment(3,0)  = deserialize.getVector3d();
           } break;
           
           // ------------------------ estimates and references -------------------
