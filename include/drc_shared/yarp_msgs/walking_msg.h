@@ -161,7 +161,7 @@ public:
         a.chars[3] = m_buffer[m_index];
         m_index++;
         return (int) a.value;
-    }
+    }   
     
     Eigen::Vector3d getVector3d() {
         Eigen::Vector3d tmp;
@@ -198,8 +198,8 @@ public:
     
     //Task space references
     Eigen::VectorXd pelvis;
-    Eigen::VectorXd lFoot;
-    Eigen::VectorXd rFoot;
+    Eigen::VectorXd lAnkle;
+    Eigen::VectorXd rAnkle;
     
     //Estimates and references
     Eigen::Vector2d zmp_ref;
@@ -246,10 +246,10 @@ public:
           case 0: {//Last task space references
               serialize.addVector3d(pelvis.segment(0,0));
               serialize.addVector3d(pelvis.segment(3,0));
-              serialize.addVector3d(lFoot.segment(0,0));
-              serialize.addVector3d(lFoot.segment(3,0));
-              serialize.addVector3d(rFoot.segment(0,0));
-              serialize.addVector3d(rFoot.segment(3,0));
+              serialize.addVector3d(lAnkle.segment(0,0));
+              serialize.addVector3d(lAnkle.segment(3,0));
+              serialize.addVector3d(rAnkle.segment(0,0));
+              serialize.addVector3d(rAnkle.segment(3,0));
           
           } break;
           
@@ -378,10 +378,10 @@ public:
           case 0: {//Last task space references
               pelvis.segment(0,0) = deserialize.getVector3d();
               pelvis.segment(3,0) = deserialize.getVector3d();
-              lFoot.segment(0,0)  = deserialize.getVector3d();
-              lFoot.segment(3,0)  = deserialize.getVector3d();
-              rFoot.segment(0,0)  = deserialize.getVector3d();
-              rFoot.segment(3,0)  = deserialize.getVector3d();
+              lAnkle.segment(0,0)  = deserialize.getVector3d();
+              lAnkle.segment(3,0)  = deserialize.getVector3d();
+              rAnkle.segment(0,0)  = deserialize.getVector3d();
+              rAnkle.segment(3,0)  = deserialize.getVector3d();
           } break;
           
           // ------------------------ estimates and references -------------------
