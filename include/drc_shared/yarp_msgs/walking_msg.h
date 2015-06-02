@@ -83,7 +83,9 @@ public:
         return tmpBottle;
     };
     
-  
+    void clear(){
+	m_size=0;
+    }
 };
 
 
@@ -264,6 +266,7 @@ public:
     
     yarp::os::Bottle toBottle()
     {
+        serialize.clear();
         serialize.addChar(command);
         switch(command) {
           
