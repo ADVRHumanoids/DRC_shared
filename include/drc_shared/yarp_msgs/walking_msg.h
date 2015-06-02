@@ -191,7 +191,7 @@ class walking_msg
   CdeSerializeBottle deserialize;
   
 public:
-  char command;
+  unsigned char command;
   std::map<std::string, int> number_param_map;
   
   walking_msg()
@@ -273,12 +273,12 @@ public:
           // ------------------------ task space references -------------------
         
           case 0: {//Last task space references
-              serialize.addVector3d(pelvis.segment(0,0));
-              serialize.addVector3d(pelvis.segment(3,0));
-              serialize.addVector3d(lAnkle.segment(0,0));
-              serialize.addVector3d(lAnkle.segment(3,0));
-              serialize.addVector3d(rAnkle.segment(0,0));
-              serialize.addVector3d(rAnkle.segment(3,0));
+              serialize.addVector3d(pelvis.segment(0,3));
+              serialize.addVector3d(pelvis.segment(3,3));
+              serialize.addVector3d(lAnkle.segment(0,3));
+              serialize.addVector3d(lAnkle.segment(3,3));
+              serialize.addVector3d(rAnkle.segment(0,3));
+              serialize.addVector3d(rAnkle.segment(3,3));
           
           } break;
           
@@ -390,6 +390,32 @@ public:
           case 24: {//earlyGCctrl_isEnabled
               serialize.addBool(earlyGCctrl_isEnabled);
           } break;
+          
+          case 200: {//sendAllParameters
+              serialize.addVector3d(stepZmpShiftL);
+              serialize.addVector3d(stepZmpShiftR);
+              serialize.addVector3d(firstStepZmpShiftL);
+              serialize.addVector3d(firstStepZmpShiftR);
+              serialize.addVector3d(lastStepZmpShiftL);
+              serialize.addVector3d(lastStepZmpShiftR);
+              serialize.addDouble(maxFootDiffAngle);
+              serialize.addDouble(stepWidth);
+              serialize.addDouble(stepLength);
+              serialize.addDouble(stepTime);
+              serialize.addDouble(doubleSupportTime);
+              serialize.addDouble(comDownShift);
+              serialize.addInt32(comHeightFiltLpfSamples);
+              serialize.addDouble(earlyFootStopHeight);
+              serialize.addBool(comCtrl_isEnabled);
+              serialize.addBool(comOnlyCtrl_isEnabled);
+              serialize.addBool(tCtrl_isEnabled);
+              serialize.addBool(footFTCtrl_isEnabled);
+              serialize.addBool(footZMPCtrl_isEnabled);
+              serialize.addBool(footZMPCtrl_isPitchEnabled);
+              serialize.addBool(footZMPCtrl_isRollEnabled);
+              serialize.addBool(footReflex_isEnabled);
+              serialize.addBool(earlyGCctrl_isEnabled);
+            } break;
         }
         return serialize.getBottle();
     }
@@ -405,12 +431,12 @@ public:
           // ------------------------ task space references -------------------
           
           case 0: {//Last task space references
-              pelvis.segment(0,0) = deserialize.getVector3d();
-              pelvis.segment(3,0) = deserialize.getVector3d();
-              lAnkle.segment(0,0)  = deserialize.getVector3d();
-              lAnkle.segment(3,0)  = deserialize.getVector3d();
-              rAnkle.segment(0,0)  = deserialize.getVector3d();
-              rAnkle.segment(3,0)  = deserialize.getVector3d();
+              pelvis.segment(0,3) = deserialize.getVector3d();
+              pelvis.segment(3,3) = deserialize.getVector3d();
+              lAnkle.segment(0,3)  = deserialize.getVector3d();
+              lAnkle.segment(3,3)  = deserialize.getVector3d();
+              rAnkle.segment(0,3)  = deserialize.getVector3d();
+              rAnkle.segment(3,3)  = deserialize.getVector3d();
           } break;
           
           // ------------------------ estimates and references -------------------
@@ -523,6 +549,34 @@ public:
           case 24: {//earlyGCctrl_isEnabled
               earlyGCctrl_isEnabled = deserialize.getBool();
           } break;
+          
+          
+          case 200: {//sendAllParameters
+              stepZmpShiftL = deserialize.getVector3d();
+              stepZmpShiftR = deserialize.getVector3d();
+              firstStepZmpShiftL = deserialize.getVector3d();
+              firstStepZmpShiftR = deserialize.getVector3d();
+              lastStepZmpShiftL = deserialize.getVector3d();
+              lastStepZmpShiftR = deserialize.getVector3d();
+              maxFootDiffAngle = deserialize.getDouble();
+              stepWidth = deserialize.getDouble();
+              stepLength = deserialize.getDouble();
+              stepTime = deserialize.getDouble();
+              doubleSupportTime = deserialize.getDouble();
+              comDownShift = deserialize.getDouble();
+              comHeightFiltLpfSamples = deserialize.getInt();
+              earlyFootStopHeight = deserialize.getDouble();
+              comCtrl_isEnabled = deserialize.getBool();
+              comOnlyCtrl_isEnabled = deserialize.getBool();
+              tCtrl_isEnabled = deserialize.getBool();
+              footFTCtrl_isEnabled = deserialize.getBool();
+              footZMPCtrl_isEnabled = deserialize.getBool();
+              footZMPCtrl_isPitchEnabled = deserialize.getBool();
+              footZMPCtrl_isRollEnabled = deserialize.getBool();
+              footReflex_isEnabled = deserialize.getBool();
+              earlyGCctrl_isEnabled = deserialize.getBool();
+           } break;
+
         }
         return;
     }
