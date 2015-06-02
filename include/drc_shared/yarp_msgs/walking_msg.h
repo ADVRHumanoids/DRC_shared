@@ -6,6 +6,7 @@
 #include <yarp/os/Bottle.h>
 #include <kdl/frames.hpp>
 #include <vector>
+#include <map>
 #include <boost/concept_check.hpp>
 
 union floatToChar
@@ -189,10 +190,35 @@ class walking_msg
   
 public:
   char command;
+  std::map<std::string, int> number_param_map;
   
   walking_msg()
     {
       command = 0;
+
+      number_param_map["stepZmpShiftL"]=2;
+      number_param_map["stepZmpShiftR"]=3;
+      number_param_map["firstStepZmpShiftL"]=4;
+      number_param_map["firstStepZmpShiftR"]=5;
+      number_param_map["lastStepZmpShiftL"]=6;
+      number_param_map["lastStepZmpShiftR"]=7;
+      number_param_map["maxFootDiffAngle"]=8;
+      number_param_map["stepWidth"]=9;
+      number_param_map["stepLength"]=10;
+      number_param_map["stepTime"]=11;
+      number_param_map["doubleSupportTime"]=12;
+      number_param_map["comDownShift"]=13;
+      number_param_map["comHeightFiltLpfSamples"]=14;
+      number_param_map["earlyFootStopHeight"]=15;
+      number_param_map["comCtrl_isEnabled"]=16;
+      number_param_map["comOnlyCtrl_isEnabled"]=17;
+      number_param_map["tCtrl_isEnabled"]=18;
+      number_param_map["footFTCtrl_isEnabled"]=19;
+      number_param_map["footZMPCtrl_isEnabled"]=20;
+      number_param_map["footZMPCtrl_isPitchEnabled"]=21;
+      number_param_map["footZMPCtrl_isRollEnabled"]=22;
+      number_param_map["footReflex_isEnabled"]=23;
+      number_param_map["earlyGCctrl_isEnabled"]=24;
     }
     
     
