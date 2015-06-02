@@ -126,7 +126,7 @@ struct point{
     double x,y,z;
 };
 struct step{
-    point position;
+    KDL::Frame pose;
     std::string name;
 };
 }
@@ -155,9 +155,15 @@ public:
             for (auto seed:seeds)
             {
 		list.addString(seed.name);
-                list.addDouble(seed.position.x);
-                list.addDouble(seed.position.y);
-                list.addDouble(seed.position.z);
+                list.addDouble(seed.pose.p.x());
+		list.addDouble(seed.pose.p.y());
+		list.addDouble(seed.pose.p.z());
+		double qx,qy,qz,qw;
+		seed.pose.M.GetQuaternion(qx,qy,qz,qw);
+		list.addDouble(qx);
+		list.addDouble(qy);
+		list.addDouble(qz);
+		list.addDouble(qw);
             }
             list.addString(topic);
         }
@@ -193,9 +199,15 @@ public:
             for (int i=0;i<seeds.size();i++)
             {
 	        seeds[i].name=list->get(counter++).asString();
-                seeds[i].position.x=list->get(counter++).asDouble();
-                seeds[i].position.y=list->get(counter++).asDouble();
-                seeds[i].position.z=list->get(counter++).asDouble();
+                seeds[i].pose.p.x(list->get(counter++).asDouble());
+		seeds[i].pose.p.y(list->get(counter++).asDouble());
+		seeds[i].pose.p.z(list->get(counter++).asDouble());
+		double qx,qy,qz,qw;
+		qx = list->get(counter++).asDouble();
+		qy = list->get(counter++).asDouble();
+		qz = list->get(counter++).asDouble();
+		qw = list->get(counter++).asDouble();
+		seeds[i].pose.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
             }
             topic = list->get(counter++).asString();
         }
