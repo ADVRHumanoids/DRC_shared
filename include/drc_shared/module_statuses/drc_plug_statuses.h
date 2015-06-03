@@ -32,7 +32,11 @@ public:
 	states.push_back("moved_back");
 	states.push_back("safe_exiting");
 	states.push_back("safe_exited");
-
+	states.push_back("grasping");
+	states.push_back("grasped");
+	states.push_back("ungrasping");
+	states.push_back("ungrasped");
+	
 	char code='a';
 	for(auto state:states)
 	{
