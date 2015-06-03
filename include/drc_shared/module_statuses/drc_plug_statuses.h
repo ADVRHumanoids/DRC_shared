@@ -16,9 +16,10 @@ public:
     status_definitions()
     {
         std::vector<std::string> states;
-
+    
 	states.push_back("idle");
-	states.push_back("ready");
+	states.push_back("ready_stick");
+	states.push_back("ready_hand");
 	states.push_back("reaching");
 	states.push_back("reached");
 	states.push_back("approaching");
@@ -27,6 +28,8 @@ public:
 	states.push_back("rotated");
 	states.push_back("moving_away");
 	states.push_back("moved_away");
+	states.push_back("moving_back");
+	states.push_back("moved_back");
 	states.push_back("safe_exiting");
 	states.push_back("safe_exited");
 

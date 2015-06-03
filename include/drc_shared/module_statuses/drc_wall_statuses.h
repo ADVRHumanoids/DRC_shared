@@ -18,7 +18,9 @@ public:
         std::vector<std::string> states;
 
 	states.push_back("idle");
-	states.push_back("ready");
+	states.push_back("ready to operate");
+	states.push_back("ready to support");
+	states.push_back("ready to cut");
 	states.push_back("reaching");
 	states.push_back("reached");
 	states.push_back("approaching");
@@ -29,15 +31,16 @@ public:
 	states.push_back("ungrasped");
 	states.push_back("rotating");
 	states.push_back("rotated");
-	states.push_back("ready to cut");
 	states.push_back("cutting");
 	states.push_back("cut");
-	states.push_back("moving_away");
-	states.push_back("moved_away");
-	states.push_back("leaving_drill");
-	states.push_back("left_drill");
-	states.push_back("safe_exiting");
-	states.push_back("safe_exited");
+	states.push_back("moving away");
+	states.push_back("moved away");
+	states.push_back("leaving drill");
+	states.push_back("left drill");
+	states.push_back("safe exiting");
+	states.push_back("safe exited");
+	states.push_back("aligning hand");
+	states.push_back("aligned hand");
 
 	char code='a';
 	for(auto state:states)
