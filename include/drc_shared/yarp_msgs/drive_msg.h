@@ -25,7 +25,7 @@ public:
     std::string command;  
     std::string frame;
     double angle;
-    double gas_time;
+    double gas_time, gas_angle;
     double full_circle_time;
     double foot_rotation;
 
@@ -40,7 +40,6 @@ public:
 	{
 	    list.addString(frame);
 	    list.add(yarp_KDL::getBlob(drive_data));
-	    list.addDouble(foot_rotation);
 	}
 	
 	if(command=="turn_left" || command=="turn_right")
@@ -52,7 +51,13 @@ public:
 	if(command=="accelerate")
         {
             list.addDouble(gas_time);
+	    list.addDouble(gas_angle);
         }
+        
+        if(command=="rotate_foot")
+	{
+	    list.addDouble(foot_rotation);
+	}
 	
         return temp;
     }
@@ -98,7 +103,6 @@ public:
 		qw = list->get(index++).asDouble();
 		drive_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
 	    }
-	    foot_rotation = list->get(index++).asDouble();
 	}
 	
 	if(command=="turn_left" || command=="turn_right")
@@ -110,8 +114,13 @@ public:
 	if(command=="accelerate")
         {
             gas_time = list->get(1).asDouble();
+	    gas_angle = list->get(2).asDouble();
         }
-	
+        
+	if(command=="rotate_foot")
+	{
+	    foot_rotation = list->get(1).asDouble();
+	}
 	return;
     }
   
