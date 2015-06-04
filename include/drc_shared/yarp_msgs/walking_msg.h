@@ -18,7 +18,7 @@ union floatToChar
 union intToChar
 {
     char chars[4];
-    int_fast32_t value;
+    int32_t value;
 };
 
 class CserializeBottle {
@@ -54,7 +54,7 @@ public:
     
     void addInt32(int in) {
         intToChar a;
-        a.value = (int_fast32_t) in;
+        a.value = (int32_t) in;
         buffer[m_size]=a.chars[0];
         m_size++;
         buffer[m_size]=a.chars[1];
@@ -146,7 +146,7 @@ public:
         m_index++;
         a.chars[1] = m_buffer[m_index];
         m_index++;
-        a.chars[1] = m_buffer[m_index];
+        a.chars[2] = m_buffer[m_index];
         m_index++;
         a.chars[3] = m_buffer[m_index];
         m_index++;
@@ -159,7 +159,7 @@ public:
         m_index++;
         a.chars[1] = m_buffer[m_index];
         m_index++;
-        a.chars[1] = m_buffer[m_index];
+        a.chars[2] = m_buffer[m_index];
         m_index++;
         a.chars[3] = m_buffer[m_index];
         m_index++;
