@@ -42,6 +42,8 @@ public:
 	    list.addString(frame);
 	    list.add(yarp_KDL::getBlob(left_hand));
 	    list.add(yarp_KDL::getBlob(right_hand));
+	    list.addInt(left);
+	    list.addInt(right);
 	}
 
         return temp;
@@ -76,6 +78,8 @@ public:
 	    {
 		left_hand = yarp_KDL::fromBlob(list->get(index));
 		right_hand = yarp_KDL::fromBlob(list->get(index+7));
+		left = list->get(index+8).asInt();
+		right = list->get(index+9).asInt();
 	    }
 	    else
 	    {
@@ -98,6 +102,9 @@ public:
 		qz = list->get(index++).asDouble();
 		qw = list->get(index++).asDouble();
 		right_hand.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+
+		left = list->get(index++).asInt();
+		right = list->get(index++).asInt();
 	    }
 	}
 
