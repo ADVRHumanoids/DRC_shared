@@ -11,6 +11,7 @@
 #include "drc_shared/module_statuses/drc_debris_statuses.h"
 #include "drc_shared/module_statuses/simple_homing_statuses.h"
 #include "drc_shared/module_statuses/drc_plug_statuses.h"
+#include "drc_shared/module_statuses/manipulation_statuses.h"
 
 namespace walkman
 {
@@ -59,7 +60,11 @@ public:
 	
 	plug::status_definitions plug_states;
 	module_code_to_status["drc_plug"] = plug_states.code_to_status;
-	module_status_to_code["drc_plug"] = plug_states.status_to_code; 
+	module_status_to_code["drc_plug"] = plug_states.status_to_code;
+	
+	manipulation::status_definitions manipulation_states;
+	module_code_to_status["manipulation"] = manipulation_states.code_to_status;
+	module_status_to_code["manipulation"] = manipulation_states.status_to_code; 
 	
     }
     

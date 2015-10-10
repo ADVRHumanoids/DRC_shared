@@ -74,38 +74,43 @@ public:
 	if(command=="data_sent")
 	{
 	    frame = list->get(index++).asString();
+
 	    if(list->get(index).asBlobLength()!=0)
 	    {
-		left_hand = yarp_KDL::fromBlob(list->get(index));
-		right_hand = yarp_KDL::fromBlob(list->get(index+7));
-		left = list->get(index+8).asInt();
-		right = list->get(index+9).asInt();
+		left_hand = yarp_KDL::fromBlob(list->get(index++));
 	    }
 	    else
-	    {
-	        double qx,qy,qz,qw;
-
+	    {  
 		left_hand.p.x(list->get(index++).asDouble());
 		left_hand.p.y(list->get(index++).asDouble());
 		left_hand.p.z(list->get(index++).asDouble());
+		double qx,qy,qz,qw;
 		qx = list->get(index++).asDouble();
 		qy = list->get(index++).asDouble();
 		qz = list->get(index++).asDouble();
 		qw = list->get(index++).asDouble();
 		left_hand.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
-		
+	    }
+	    
+	    if(list->get(index).asBlobLength()!=0)
+	    {
+		right_hand = yarp_KDL::fromBlob(list->get(index++));
+	    }
+	    else
+	    {  
 		right_hand.p.x(list->get(index++).asDouble());
 		right_hand.p.y(list->get(index++).asDouble());
 		right_hand.p.z(list->get(index++).asDouble());
+		double qx,qy,qz,qw;
 		qx = list->get(index++).asDouble();
 		qy = list->get(index++).asDouble();
 		qz = list->get(index++).asDouble();
 		qw = list->get(index++).asDouble();
 		right_hand.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
-
-		left = list->get(index++).asInt();
-		right = list->get(index++).asInt();
 	    }
+	    
+	    left = list->get(index++).asInt();
+	    right = list->get(index++).asInt();
 	}
 
 	return;
