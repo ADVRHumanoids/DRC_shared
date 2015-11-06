@@ -1,4 +1,4 @@
-/* Copyright [2014,2015] [Mirko Ferrati, Alessandro Settimi, Valerio Varricchio]
+/* Copyright [2014,2015] [Alessio Rocchi, Mirko Ferrati, Alessandro Settimi, Valerio Varricchio]
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
