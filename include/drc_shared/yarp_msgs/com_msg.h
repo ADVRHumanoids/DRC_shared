@@ -1,6 +1,6 @@
 /* Software License Agreement (BSD License)
  *
- *  Copyright (c) 2016-, Dimitrios Kanoulas
+ *  Copyright (c) 2015-2016, Dimitrios Kanoulas
  *
  *  All rights reserved.
  *
@@ -45,7 +45,7 @@ class com_msg
 {
   /** \brief The Center-of-Mass message object represents an object's grasp
     * pose including the CoM pose (rotation, translation), along with its
-    * legth and side limits.
+    * legth and side limits, and all the possible object grasps.
     *
     * \author Dimitrios Kanoulas
     */
@@ -61,6 +61,7 @@ class com_msg
       com_data.M = KDL::Rotation::Identity();
       handle_length = 0.0;
       left_dist_to_com = 0.0;
+      obj_grasps_number = 0;
     }
 
     /** \brief YARP message exchange toBottle method. */
@@ -77,6 +78,10 @@ class com_msg
         list.add (yarp_KDL::getBlob (com_data));
         list.addDouble (handle_length);
         list.addDouble (left_dist_to_com);
+
+        list.addInt(obj_grasps_number);
+        for(int i=0;i<obj_grasps_number;i++)
+          list.add (yarp_KDL::getBlob (obj_grasps.at(i)));
       }
 
       return temp;
@@ -128,6 +133,31 @@ class com_msg
 
         handle_length = list->get(index++).asDouble();
         left_dist_to_com = list->get(index++).asDouble();
+
+        // Grasps
+        obj_grasps_number = list->get(index++).asInt();
+
+        for(int i = 0; i < obj_grasps_number; i++)
+        {
+          if (list->get(index).asBlobLength() != 0)
+          {
+            obj_grasps.push_back (yarp_KDL::fromBlob (list->get(index++)));
+          }
+          else
+          {
+            KDL::Frame temp_frame;
+            temp_frame.p.x(list->get(index++).asDouble());
+            temp_frame.p.y(list->get(index++).asDouble());
+            temp_frame.p.z(list->get(index++).asDouble());
+            double qx,qy,qz,qw;
+            qx = list->get(index++).asDouble();
+            qy = list->get(index++).asDouble();
+            qz = list->get(index++).asDouble();
+            qw = list->get(index++).asDouble();
+            temp_frame.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+            obj_grasps.push_back(temp_frame);
+          }
+        }
       }
 
       return;
@@ -148,6 +178,12 @@ class com_msg
 
     /** \brief Distance from the CoM to the left part of the object. */
     double left_dist_to_com;
+
+    /** \brief A vector with all the possible object grasps. */
+    std::vector<KDL::Frame> obj_grasps;
+
+    /** \brief Number of object grasps. */
+    int obj_grasps_number;
 };
 
 #endif // COM_MSG
