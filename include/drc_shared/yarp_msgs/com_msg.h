@@ -136,6 +136,7 @@ class com_msg
 
         // Grasps
         obj_grasps_number = list->get(index++).asInt();
+        obj_grasps.clear ();
 
         for(int i = 0; i < obj_grasps_number; i++)
         {
