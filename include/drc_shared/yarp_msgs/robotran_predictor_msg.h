@@ -32,76 +32,88 @@ namespace robotran_predictor {
 class robotran_predictor::state_input // NOTE single joint! TBD do an array
 {
 public:
-  
-    float        link_pos;           // rad         
-    float        motor_pos;          // rad
-    float        link_vel;           // rad TBD on the firmware
-    int16_t      motor_vel;          // rad/s
-    int16_t      torque;             // Nm
-    uint16_t     max_temperature;    // C
-    uint16_t     fault;
-    uint16_t     rtt;                // us
-    uint16_t     op_idx_ack;         // op [ack/nack] , idx
-    float        aux; 
+      
+    int joint_num = 0;
         
+    yarp::sig::Vector        link_pos;           // rad         
+    yarp::sig::Vector        motor_pos;          // rad
+    yarp::sig::Vector        link_vel;           // rad TBD on the firmware
+    yarp::sig::Vector        motor_vel;          // rad/s
+    yarp::sig::Vector        torque;             // Nm
+    yarp::sig::VectorOf<uint16_t>     max_temperature;    // C
+    yarp::sig::VectorOf<uint16_t>     fault;
+    yarp::sig::VectorOf<uint16_t>     rtt;                // us
+    yarp::sig::VectorOf<uint16_t>     op_idx_ack;         // op [ack/nack] , idx
+    yarp::sig::VectorOf<float>        aux; 
+    
     state_input()
     {
-        link_pos = 0.0;
-        motor_pos = 0.0;
-        link_vel = 0.0;
-        motor_vel = 0;
-        torque = 0;
-        max_temperature = 0;
-        fault = 255;
-        rtt = 0;
-        op_idx_ack = 0;
-        aux = 0.0;
     }
     
     yarp::os::Bottle toBottle()
     {
         yarp::os::Bottle b;
         
-        b.addDouble(link_pos);
-        b.addDouble(motor_pos);
-        b.addDouble(link_vel);
-        b.addInt(motor_vel);
-        b.addInt(torque);
-        b.addInt(max_temperature);
-        b.addInt(fault);
-        b.addInt(rtt);
-        b.addInt(op_idx_ack);
-        b.addDouble(aux);
+        b.addInt(joint_num);
+        
+        for(int i = 0; i < joint_num; i++) {
+            b.addDouble(link_pos[i]);
+            b.addDouble(motor_pos[i]);
+            b.addDouble(link_vel[i]);
+            b.addInt(motor_vel[i]);
+            b.addInt(torque[i]);
+            b.addInt(max_temperature[i]);
+            b.addInt(fault[i]);
+            b.addInt(rtt[i]);
+            b.addInt(op_idx_ack[i]);
+            b.addDouble(aux[i]);
+        }
 
         return b;
     }
 
     void fromBottle(yarp::os::Bottle* b)
     {
-        if(b->size() != STATE_INPUT_NUM){
+        joint_num = b->get(0).asInt();
+        if(b->size() != (STATE_INPUT_NUM*joint_num + 1)){
             return;
         }
         
-        link_pos = (float) b->get(0).asDouble();
-        motor_pos = (float) b->get(1).asDouble();
-        link_vel = (float) b->get(2).asDouble();
-        motor_vel = (int16_t) b->get(3).asInt();
-        torque = (int16_t) b->get(4).asInt();
-        max_temperature = (uint16_t) b->get(5).asInt();
-        fault = (uint16_t) b->get(6).asInt();
-        rtt = (uint16_t) b->get(7).asInt();
-        op_idx_ack = (uint16_t) b->get(8).asInt();
-        aux = (float) b->get(9).asDouble();
+        link_pos.resize(joint_num, 0.0);
+        motor_pos.resize(joint_num, 0.0);
+        link_vel.resize(joint_num, 0.0);
+        motor_vel.resize(joint_num, 0.0);
+        torque.resize(joint_num, 0.0);
+        max_temperature.resize(joint_num, 0);
+        fault.resize(joint_num, 0);
+        rtt.resize(joint_num, 0);
+        op_idx_ack.resize(joint_num, 0);
+        aux.resize(joint_num, 0.0);
+        
+        for(int i = 1,j = 0; i < STATE_INPUT_NUM*joint_num + 1; j++) {
+            link_pos[j] = (float) b->get(i++).asDouble();
+            motor_pos[j] = (float) b->get(i++).asDouble();
+            link_vel[j] = (float) b->get(i++).asDouble();
+            motor_vel[j] = (int16_t) b->get(i++).asInt();
+            torque[j] = (int16_t) b->get(i++).asInt();
+            max_temperature[j] = (uint16_t) b->get(i++).asInt();
+            fault[j] = (uint16_t) b->get(i++).asInt();
+            rtt[j] = (uint16_t) b->get(i++).asInt();
+            op_idx_ack[j] = (uint16_t) b->get(i++).asInt();
+            aux[j] = (float) b->get(i++).asDouble();
+        }
         
         return;
     }
     
     void print()
     {
-        yInfo("%f, %f, %f, %d, %d, %d, %d, %d, %d, %f", 
-              link_pos, motor_pos, link_vel, 
-              motor_vel, torque, max_temperature, 
-              fault, rtt, op_idx_ack, aux);
+        for(int i = 0; i < joint_num; i++) {
+            yInfo("%d, %d, %f, %f, %f, %f, %f, %d, %d, %d, %d, %f", 
+                joint_num, i, link_pos[i], motor_pos[i], link_vel[i], 
+                motor_vel[i], torque[i], max_temperature[i], 
+                fault[i], rtt[i], op_idx_ack[i], aux[i]);
+        }
     }
 };
 
