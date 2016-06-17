@@ -20,7 +20,7 @@
 #include <yarp/os/Bottle.h>
 #include <yarp/os/LogStream.h>
 
-#define STATE_INPUT_NUM 10
+#define STATE_INPUT_NUM 11
 
 namespace robotran_predictor {
     class state_input;
@@ -40,6 +40,7 @@ public:
     yarp::sig::Vector        link_vel;           // rad TBD on the firmware
     yarp::sig::Vector        motor_vel;          // rad/s
     yarp::sig::Vector        torque;             // Nm
+    yarp::sig::Vector        pos_ref;            // rad 
     yarp::sig::VectorOf<uint16_t>     max_temperature;    // C
     yarp::sig::VectorOf<uint16_t>     fault;
     yarp::sig::VectorOf<uint16_t>     rtt;                // us
@@ -62,6 +63,7 @@ public:
             b.addDouble(link_vel[i]);
             b.addInt(motor_vel[i]);
             b.addInt(torque[i]);
+            b.addDouble(pos_ref[i]);
             b.addInt(max_temperature[i]);
             b.addInt(fault[i]);
             b.addInt(rtt[i]);
@@ -84,6 +86,7 @@ public:
         link_vel.resize(joint_num, 0.0);
         motor_vel.resize(joint_num, 0.0);
         torque.resize(joint_num, 0.0);
+        pos_ref.resize(joint_num, 0.0);
         max_temperature.resize(joint_num, 0);
         fault.resize(joint_num, 0);
         rtt.resize(joint_num, 0);
@@ -96,6 +99,7 @@ public:
             link_vel[j] = (float) b->get(i++).asDouble();
             motor_vel[j] = (int16_t) b->get(i++).asInt();
             torque[j] = (int16_t) b->get(i++).asInt();
+            pos_ref[j] = (float) b->get(i++).asDouble();
             max_temperature[j] = (uint16_t) b->get(i++).asInt();
             fault[j] = (uint16_t) b->get(i++).asInt();
             rtt[j] = (uint16_t) b->get(i++).asInt();
@@ -109,9 +113,9 @@ public:
     void print()
     {
         for(int i = 0; i < joint_num; i++) {
-            yInfo("%d, %d, %f, %f, %f, %f, %f, %d, %d, %d, %d, %f", 
+            yInfo("%d, %d, %f, %f, %f, %f, %f, %f, %d, %d, %d, %d, %f", 
                 joint_num, i, link_pos[i], motor_pos[i], link_vel[i], 
-                motor_vel[i], torque[i], max_temperature[i], 
+                motor_vel[i], torque[i], pos_ref[i], max_temperature[i], 
                 fault[i], rtt[i], op_idx_ack[i], aux[i]);
         }
     }
