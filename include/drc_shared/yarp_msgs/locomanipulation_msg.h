@@ -33,19 +33,21 @@ public:
         command="";
         frame="";
         scale_x=scale_y=scale_z=0.0;
-        object_data.p.x(0.0);
-        object_data.p.y(0.0);
-        object_data.p.z(0.0);
-        object_data.M = KDL::Rotation::Identity();
+        data.p.x(0.0);
+        data.p.y(0.0);
+        data.p.z(0.0);
+        data.M = KDL::Rotation::Identity();
     }
   
     std::string command;
     
     std::string frame;
     
-    KDL::Frame object_data;
+    KDL::Frame data;
     
     double scale_x,scale_y,scale_z;
+    
+    double x,y,theta;
     
     std::vector<std::vector<double>> solution_nodes;
 
@@ -60,11 +62,11 @@ public:
         {
             list.addString(frame);
             
-            list.addDouble(object_data.p.x());
-            list.addDouble(object_data.p.y());
-            list.addDouble(object_data.p.z());
+            list.addDouble(data.p.x()); //object data
+            list.addDouble(data.p.y());
+            list.addDouble(data.p.z());
             double qx,qy,qz,qw;
-            object_data.M.GetQuaternion(qx,qy,qz,qw);
+            data.M.GetQuaternion(qx,qy,qz,qw);
             list.addDouble(qx);
             list.addDouble(qy);
             list.addDouble(qz);
@@ -83,6 +85,25 @@ public:
                 {
                     list.addDouble(item);
                 }
+        }
+        
+        if(command=="commands")
+        {
+            list.addString(frame);
+            
+            list.addDouble(data.p.x()); //hand position
+            list.addDouble(data.p.y());
+            list.addDouble(data.p.z());
+            double qx,qy,qz,qw;
+            data.M.GetQuaternion(qx,qy,qz,qw);
+            list.addDouble(qx);
+            list.addDouble(qy);
+            list.addDouble(qz);
+            list.addDouble(qw);
+            
+            list.addDouble(x);
+            list.addDouble(y);
+            list.addDouble(theta);
         }
 
         return temp;
@@ -114,15 +135,15 @@ public:
         {
             frame = list->get(index++).asString();
 
-            object_data.p.x(list->get(index++).asDouble());
-            object_data.p.y(list->get(index++).asDouble());
-            object_data.p.z(list->get(index++).asDouble());
+            data.p.x(list->get(index++).asDouble());
+            data.p.y(list->get(index++).asDouble());
+            data.p.z(list->get(index++).asDouble());
             double qx,qy,qz,qw;
             qx = list->get(index++).asDouble();
             qy = list->get(index++).asDouble();
             qz = list->get(index++).asDouble();
             qw = list->get(index++).asDouble();
-            object_data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+            data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
 
             scale_x = list->get(index++).asDouble();
             scale_y = list->get(index++).asDouble();
@@ -144,6 +165,25 @@ public:
                 }
                 solution_nodes.push_back(node);
             }
+        }
+
+        if(command=="commands")
+        {
+            frame = list->get(index++).asString();
+
+            data.p.x(list->get(index++).asDouble());
+            data.p.y(list->get(index++).asDouble());
+            data.p.z(list->get(index++).asDouble());
+            double qx,qy,qz,qw;
+            qx = list->get(index++).asDouble();
+            qy = list->get(index++).asDouble();
+            qz = list->get(index++).asDouble();
+            qw = list->get(index++).asDouble();
+            data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+
+            x = list->get(index++).asDouble();
+            y = list->get(index++).asDouble();
+            theta = list->get(index++).asDouble();
         }
 
         return;
