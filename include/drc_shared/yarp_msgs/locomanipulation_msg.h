@@ -34,6 +34,7 @@ public:
         frame="";
         scale_x=scale_y=scale_z=0.0;
         data = KDL::Frame::Identity();
+        t_T_h = KDL::Frame::Identity();
         desired_position = KDL::Frame::Identity();
         stepLengthX = 0.1;
         stepLengthY = 0.1;
@@ -44,6 +45,7 @@ public:
     std::string frame;
     
     KDL::Frame data;
+    KDL::Frame t_T_h;
     
     double scale_x,scale_y,scale_z;
     
@@ -114,6 +116,15 @@ public:
             list.addDouble(qy);
             list.addDouble(qz);
             list.addDouble(qw);
+            
+            list.addDouble(t_T_h.p.x()); // position of the head w.r.t. the object
+            list.addDouble(t_T_h.p.y());
+            list.addDouble(t_T_h.p.z());
+            t_T_h.M.GetQuaternion(qx,qy,qz,qw);
+            list.addDouble(qx);
+            list.addDouble(qy);
+            list.addDouble(qz);
+            list.addDouble(qw);
         }
 
         return temp;
@@ -179,7 +190,7 @@ public:
 
         if(command=="locomanipulate")
         {
-            desired_position.p.x(list->get(index++).asDouble());
+            desired_position.p.x(list->get(index++).asDouble()); //NOTE: the robot position w.r.t. frame
             desired_position.p.y(list->get(index++).asDouble());
             desired_position.p.z(list->get(index++).asDouble());
             double qx,qy,qz,qw;
@@ -194,7 +205,7 @@ public:
 
             frame = list->get(index++).asString();
 
-            data.p.x(list->get(index++).asDouble());
+            data.p.x(list->get(index++).asDouble()); //NOTE: the hand position w.r.t. frame
             data.p.y(list->get(index++).asDouble());
             data.p.z(list->get(index++).asDouble());
             qx = list->get(index++).asDouble();
@@ -202,6 +213,15 @@ public:
             qz = list->get(index++).asDouble();
             qw = list->get(index++).asDouble();
             data.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+
+            t_T_h.p.x(list->get(index++).asDouble()); //NOTE: the position of the head w.r.t. the object
+            t_T_h.p.y(list->get(index++).asDouble());
+            t_T_h.p.z(list->get(index++).asDouble());
+            qx = list->get(index++).asDouble();
+            qy = list->get(index++).asDouble();
+            qz = list->get(index++).asDouble();
+            qw = list->get(index++).asDouble();
+            t_T_h.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
         }
 
         return;
