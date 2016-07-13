@@ -38,6 +38,7 @@ public:
         desired_position = KDL::Frame::Identity();
         stepLengthX = 0.1;
         stepLengthY = 0.1;
+        trajType="linear";
     }
   
     std::string command;
@@ -126,8 +127,9 @@ public:
             list.addDouble(qy);
             list.addDouble(qz);
             list.addDouble(qw);
+
             list.addString(trajType);
-            
+
         }
 
         return temp;
