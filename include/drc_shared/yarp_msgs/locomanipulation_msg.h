@@ -52,6 +52,7 @@ public:
     KDL::Frame desired_position;
     double stepLengthX;
     double stepLengthY;
+    std::string trajType;
     
     std::vector<std::vector<double>> solution_nodes;
 
@@ -125,6 +126,8 @@ public:
             list.addDouble(qy);
             list.addDouble(qz);
             list.addDouble(qw);
+            list.addString(trajType);
+            
         }
 
         return temp;
@@ -222,6 +225,7 @@ public:
             qz = list->get(index++).asDouble();
             qw = list->get(index++).asDouble();
             t_T_h.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+            trajType = list->get(index++).asString();
         }
 
         return;
