@@ -37,7 +37,7 @@ public:
         t_T_h = KDL::Frame::Identity();
         desired_position = KDL::Frame::Identity();
         stepLengthX = 0.1;
-        stepLengthY = 0.1;
+        stepLengthY = 0.05;
         trajType="linear";
     }
   
