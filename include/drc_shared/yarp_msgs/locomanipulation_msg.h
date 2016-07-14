@@ -39,12 +39,14 @@ public:
         stepLengthX = 0.1;
         stepLengthY = 0.05;
         trajType="linear";
+        hand = "right";
     }
   
     std::string command;
     
     std::string frame;
     
+    std::string hand;
     KDL::Frame data;
     KDL::Frame t_T_h;
     
@@ -109,6 +111,7 @@ public:
             list.addDouble(stepLengthY);
 
             list.addString(frame);
+            list.addString(hand);
 
             list.addDouble(data.p.x()); //hand position
             list.addDouble(data.p.y());
@@ -209,6 +212,7 @@ public:
             stepLengthY = list->get(index++).asDouble();
 
             frame = list->get(index++).asString();
+            hand = list->get(index++).asString();
 
             data.p.x(list->get(index++).asDouble()); //NOTE: the hand position w.r.t. frame
             data.p.y(list->get(index++).asDouble());
