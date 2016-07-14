@@ -87,6 +87,7 @@ public:
         
         if(command=="solution")
         {
+            list.addString(hand);
             list.addDouble(solution_nodes.size());
             for(auto node:solution_nodes)
                 for(auto item:node)
@@ -181,6 +182,8 @@ public:
         
         if(command=="solution")
         {
+            hand = list->get(index++).asString();
+
             solution_nodes.clear();
 
             double sol_dim = list->get(index++).asDouble();
