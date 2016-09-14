@@ -28,12 +28,15 @@ public:
     {
         command="";
         frame="";
+		traj_type=0;
         desired_poses.clear();
     }
   
     std::string command;
     
     std::string frame;
+	
+	int traj_type;
 
     std::map<std::string,KDL::Frame> desired_poses;
 
@@ -47,6 +50,8 @@ public:
         if(command=="poses")
         {
             list.addString(frame);
+
+			list.addInt(traj_type);
 
             list.addInt(desired_poses.size());
 
@@ -93,9 +98,11 @@ public:
         {
             frame = list->get(1).asString();
 
-            int num = list->get(2).asInt();
+			traj_type = list->get(2).asInt();
 
-            int index=3;
+            int num = list->get(3).asInt();
+
+            int index=4;
 
             desired_poses.clear();
 
