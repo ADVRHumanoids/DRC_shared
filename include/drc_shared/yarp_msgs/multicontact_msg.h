@@ -29,7 +29,9 @@ public:
         command="";
         frame="";
 		traj_type=0;
+		touch=false;
         desired_poses.clear();
+		duration=5.0;
     }
   
     std::string command;
@@ -37,6 +39,10 @@ public:
     std::string frame;
 	
 	int traj_type;
+
+	double duration;
+
+	bool touch;
 
     std::map<std::string,KDL::Frame> desired_poses;
 
@@ -52,6 +58,10 @@ public:
             list.addString(frame);
 
 			list.addInt(traj_type);
+
+			list.addDouble(duration);
+
+			list.addInt(touch);
 
             list.addInt(desired_poses.size());
 
@@ -96,13 +106,13 @@ public:
 
         if(command=="poses")
         {
-            frame = list->get(1).asString();
+			int index=0;
 
-			traj_type = list->get(2).asInt();
-
-            int num = list->get(3).asInt();
-
-            int index=4;
+			frame = list->get(index++).asString();
+			traj_type = list->get(index++).asInt();
+			duration = list->get(index++).asDouble();
+			touch = list->get(index++).asInt();
+			int num = list->get(index++).asInt();
 
             desired_poses.clear();
 
