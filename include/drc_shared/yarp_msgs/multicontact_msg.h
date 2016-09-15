@@ -106,7 +106,7 @@ public:
 
         if(command=="poses")
         {
-			int index=0;
+			int index=1;
 
 			frame = list->get(index++).asString();
 			traj_type = list->get(index++).asInt();
