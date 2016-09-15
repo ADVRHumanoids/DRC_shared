@@ -29,9 +29,13 @@ public:
         command="";
         frame="";
 		traj_type=0;
-		touch=false;
         desired_poses.clear();
+		touch["LSoftHand"] = false;
+		touch["RSoftHand"] = false;
+		touch["l_sole"] = false;
+		touch["r_sole"] = false;
 		duration=5.0;
+		height=0.1;
     }
   
     std::string command;
@@ -42,9 +46,11 @@ public:
 
 	double duration;
 
-	bool touch;
+	double height;
 
     std::map<std::string,KDL::Frame> desired_poses;
+
+	std::map<std::string,bool> touch;
 
     yarp::os::Bottle toBottle()
     {
@@ -61,7 +67,7 @@ public:
 
 			list.addDouble(duration);
 
-			list.addInt(touch);
+			list.addDouble(height);
 
             list.addInt(desired_poses.size());
 
@@ -78,6 +84,15 @@ public:
                 list.addDouble(qz);
                 list.addDouble(qw);
             }
+		}
+
+		if(command=="touch")
+		{
+            for(auto t:touch)
+			{
+				list.addString(t.first);
+				list.addInt(t.second);
+			}
         }
 
         return temp;
@@ -111,7 +126,7 @@ public:
 			frame = list->get(index++).asString();
 			traj_type = list->get(index++).asInt();
 			duration = list->get(index++).asDouble();
-			touch = list->get(index++).asInt();
+			height = list->get(index++).asDouble();
 			int num = list->get(index++).asInt();
 
             desired_poses.clear();
@@ -133,6 +148,17 @@ public:
 
                 desired_poses[temp_name] = temp_frame;
             }
+		}
+
+		if(command=="touch")
+		{
+			int index=1;
+
+            for(int i=0;i<4;i++)
+			{
+				std::string ee = list->get(index++).asString();
+				touch[ee] = list->get(index++).asInt();
+			}
         }
 
         return;
