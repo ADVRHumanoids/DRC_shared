@@ -95,11 +95,17 @@ public:
 			}
         }
 
+        if(command=="switch")
+		{
+			list.addString(frame);
+		}
         return temp;
     }
 
     void fromBottle(yarp::os::Bottle* temp)
     {
+		desired_poses.clear();
+
         if (temp->get(0).isNull())
         {
             command="";
@@ -128,8 +134,6 @@ public:
 			duration = list->get(index++).asDouble();
 			height = list->get(index++).asDouble();
 			int num = list->get(index++).asInt();
-
-            desired_poses.clear();
 
             for(int i=0; i<num; i++)
             {
@@ -160,6 +164,11 @@ public:
 				touch[ee] = list->get(index++).asInt();
 			}
         }
+
+        if(command=="switch")
+		{
+			frame = list->get(1).asString();
+		}
 
         return;
     }
