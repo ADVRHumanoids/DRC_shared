@@ -36,6 +36,7 @@ public:
 		touch["r_sole"] = false;
 		duration=5.0;
 		height=0.1;
+        deg_amount=0.0;
     }
   
     std::string command;
@@ -48,6 +49,8 @@ public:
 
 	double height;
 
+    double deg_amount;
+
     std::map<std::string,KDL::Frame> desired_poses;
 
 	std::map<std::string,bool> touch;
@@ -58,6 +61,11 @@ public:
         yarp::os::Bottle& list= temp.addList();
 
         list.addString(command);
+        
+        if(command=="torso_pitch" || command=="torso_yaw" )
+        {
+            list.addDouble(deg_amount);
+        }
 
         if(command=="poses")
         {
@@ -125,6 +133,11 @@ public:
 
         command = list->get(0).asString();
 
+        if(command=="torso_pitch" || command=="torso_yaw" )
+        {
+            deg_amount = list->get(1).asDouble();
+        }
+        
         if(command=="poses")
         {
 			int index=1;
