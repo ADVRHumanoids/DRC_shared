@@ -83,7 +83,7 @@ public:
         }
 
         int index = 0;
-        command = list->get(index).asString();
+        command = list->get(index++).asString();
 
         if(command=="target")
         {
