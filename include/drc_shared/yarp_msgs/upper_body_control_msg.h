@@ -40,7 +40,7 @@ public:
 
         list.addString(command);
 
-        if(command=="target")
+        if(command=="target" || command=="myo_target")
         {
 	    int num = hands.size();
 	    list.addInt(num);
@@ -85,7 +85,7 @@ public:
         int index = 0;
         command = list->get(index++).asString();
 
-        if(command=="target")
+        if(command=="target" || command=="myo_target")
         {
 	    int num = list->get(index++).asInt();
 
