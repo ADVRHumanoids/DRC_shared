@@ -27,11 +27,15 @@ class upper_body_control_msg
 public:
     upper_body_control_msg()
     {
-
+        hands["left_hand"];
+        hands["right_hand"];
+        hands_closure["left_hand"];
+        hands_closure["right_hand"];
     }
   
     std::string command = "";
     std::map<std::string, KDL::Frame> hands;
+    std::map<std::string, double> hands_closure;
 
     yarp::os::Bottle toBottle()
     {
@@ -57,6 +61,8 @@ public:
                 list.addDouble(qy);
                 list.addDouble(qz);
                 list.addDouble(qw);
+
+                list.addDouble(hands_closure.at(pose.first));
             }
 	}
 
@@ -106,6 +112,8 @@ public:
                 temp_frame.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
 
                 hands[temp_name] = temp_frame;
+
+                hands_closure[temp_name] = list->get(index++).asDouble();
             }
 	}
 
