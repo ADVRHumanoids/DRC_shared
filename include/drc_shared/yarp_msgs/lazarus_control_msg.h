@@ -29,12 +29,15 @@ public:
     {
         hands["left_hand"];
         hands["right_hand"];
+	feet["left_foot"];
+	feet["right_foot"];
         hands_closure["left_hand"];
         hands_closure["right_hand"];
     }
   
     std::string command = "";
     std::map<std::string, KDL::Frame> hands;
+    std::map<std::string, KDL::Frame> feet;
     std::map<std::string, double> hands_closure;
 
     yarp::os::Bottle toBottle()
@@ -46,7 +49,7 @@ public:
 
         if(command=="target" || command=="myo_target")
         {
-	    int num = hands.size();
+	    int num = hands.size() + feet.size();
 	    list.addInt(num);
 
             for(auto pose:hands)
@@ -63,6 +66,20 @@ public:
                 list.addDouble(qw);
 
                 list.addDouble(hands_closure.at(pose.first));
+            }
+
+            for(auto pose:feet)
+            {
+                list.addString(pose.first);
+                list.addDouble(pose.second.p.x());
+                list.addDouble(pose.second.p.y());
+                list.addDouble(pose.second.p.z());
+                double qx,qy,qz,qw;
+                pose.second.M.GetQuaternion(qx,qy,qz,qw);
+                list.addDouble(qx);
+                list.addDouble(qy);
+                list.addDouble(qz);
+                list.addDouble(qw);
             }
 	}
 
@@ -96,7 +113,7 @@ public:
 	    int num = list->get(index++).asInt();
 
 	    hands.clear();
-            for(int i=0; i<num; i++)
+            for(int i=0; i<num/2; i++)
             {
                 KDL::Frame temp_frame;
                 std::string temp_name = list->get(index++).asString();
@@ -114,6 +131,25 @@ public:
                 hands[temp_name] = temp_frame;
 
                 hands_closure[temp_name] = list->get(index++).asDouble();
+            }
+
+            feet.clear();
+            for(int i=0; i<num/2; i++)
+            {
+                KDL::Frame temp_frame;
+                std::string temp_name = list->get(index++).asString();
+
+                temp_frame.p.x(list->get(index++).asDouble());
+                temp_frame.p.y(list->get(index++).asDouble());
+                temp_frame.p.z(list->get(index++).asDouble());
+                double qx,qy,qz,qw;
+                qx = list->get(index++).asDouble();
+                qy = list->get(index++).asDouble();
+                qz = list->get(index++).asDouble();
+                qw = list->get(index++).asDouble();
+                temp_frame.M = KDL::Rotation::Quaternion(qx,qy,qz,qw);
+
+                feet[temp_name] = temp_frame;
             }
 	}
 
